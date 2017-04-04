@@ -1,0 +1,72 @@
+﻿@model IEnumerable<BugTracker.Models.Project>
+@using BugTracker.Helpers;
+@{
+    ViewBag.Title = "Index";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h2>Edit Projects</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>All Projects</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <table id="all_projects" class="table" width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.Label("Project")
+                        </th>
+                        <th>
+                            @Html.Label("Description")
+                        </th>
+                        <th>
+                            @Html.Label("Created")
+                        </th>
+                        <th>
+                            @Html.Label("Number of Tickets")
+                        </th>
+                        <th>
+                            @Html.Label("Project Manager")
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(item.Name, "Details", new { id = item.Id })
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.Raw(item.Created.ToLocalTime().LocalDateTime)
+                            </td>
+                            <td>
+                                @Html.Raw(item.Tickets.Count)
+                            </td>
+                            <td>
+                                @if (item.PMId != null)
+                                {
+                                    @Html.Raw(DisplayHelper.User(item.PMId).DisplayName)
+                                }
+                            </td>
+                            @*<td>
+                                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                                    @Html.ActionLink("Details", "Details", new { id=item.Id })
+                                </td>*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

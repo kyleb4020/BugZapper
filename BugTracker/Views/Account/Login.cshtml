@@ -1,0 +1,151 @@
+﻿@using BugTracker.Models
+@model LoginViewModel
+@{
+    Layout = null;
+    ViewBag.Title = "Index";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title Bug Tracker</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @*<style>
+            @@font-face {
+                font-family: "ParryHotter";
+                src: url("/fonts/ParryHotter.ttf");
+            }
+
+            h1 {
+                font-family: ParryHotter;
+            }
+        </style>*@
+    <link rel="icon" type="image/png" href="~/images/bugzap2-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="~/images/bugzap2-16x16.png" sizes="16x16" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4" style="margin-top:1em;margin-bottom:1em;">
+                <img class="img-responsive light dim" src="~/images/light_grey.png" />
+                <img class="img-responsive cage" src="~/images/cage_twogrey.png" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <span style="font-size:3em; font-weight:bold">WELCOME TO THE</span>
+                <h1 class="parryhotter" style="font-size: 5em;">BUG ZAPPER!</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-3 text-center">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, new { @class = "col-md-4 control-label" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-4 control-label" })
+                        <div class="col-md-8">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <div class="checkbox">
+                                    @Html.CheckBoxFor(m => m.RememberMe)
+                                    @Html.LabelFor(m => m.RememberMe)
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="form-group">
+                        <div class="col-md-8">
+                            <input type="submit" value="Log in" class="btn btn-primary" />
+                        </div>
+                    </div>
+                    <p>
+                        @Html.ActionLink("Register as a new user", "Register", "Account", null, new { @class = "btn btn-info" })
+                    </p>
+                    @*Enable this once you have account confirmation enabled for password reset functionality*@
+                    <p>
+                        @Html.ActionLink("Forgot your password?", "ForgotPassword", "Account", null, new { @class = "btn btn-warning" })
+                    </p>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-3 text-center">
+                <section id="socialLoginForm">
+                    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                </section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2 col-lg-offset-2">
+                @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input class="hidden" name="Email" value="krbbugtrackeradmin@mailinator.com" />
+                    <input class="hidden" name="Password" value="DemoAdmin123!" />
+                    <div class="form-group">
+                        <div class="col-md-12 text-center">
+                            <input type="submit" value="Demo Admin" class="btn btn-success" />
+                        </div>
+                    </div>
+                }
+                </div>
+            <div class="col-lg-2">
+                @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input class="hidden" name="Email" value="krbbugtrackerpm1@mailinator.com" />
+                    <input class="hidden" name="Password" value="DemoPM123!" />
+                    <div class="form-group">
+                        <div class="col-md-12 text-center">
+                            <input type="submit" value="Demo Project Manager" class="btn btn-success" />
+                        </div>
+                    </div>
+                }
+                </div>
+            <div class="col-lg-2">
+                @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input class="hidden" name="Email" value="krbbugtrackerdev1@mailinator.com" />
+                    <input class="hidden" name="Password" value="DemoDev123!" />
+                    <div class="form-group">
+                        <div class="col-md-12 text-center">
+                            <input type="submit" value="Demo Developer" class="btn btn-success" />
+                        </div>
+                    </div>
+                }
+                </div>
+            <div class="col-lg-2">
+                @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input class="hidden" name="Email" value="krbbugtrackersub@mailinator.com" />
+                    <input class="hidden" name="Password" value="DemoSub123!" />
+                    <div class="form-group">
+                        <div class="col-md-12 text-center">
+                            <input type="submit" value="Demo Submitter" class="btn btn-success" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>

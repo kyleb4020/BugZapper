@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "ConfirmationSent";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1 text-center">
+            <h2>Thank you for confirming your email!</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1 text-center">
+            @Html.ActionLink("Proceed to Home Page", "Index", "Home", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+</div>

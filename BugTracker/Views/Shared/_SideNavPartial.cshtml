@@ -1,0 +1,50 @@
+﻿@using BugTracker.Helpers;
+@{
+    UserRolesHelpers urh = new UserRolesHelpers();
+    var userId = User.Identity.User().Id;
+}
+
+<li id="home-nav"><a href="/Home/"><i class='fa fa-dashboard'></i> Dashboard</a></li>
+@if (urh.IsUserInRole(userId, "Admin") || urh.IsUserInRole(userId, "Project Manager"))
+{
+    <li class="dropdown" id="admin-nav">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='fa fa-users'></i> Manage Team <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li id="admin-dash"><a href="/Admin/Index">Team Dashboard</a></li>
+            @if (urh.IsUserInRole(userId, "Admin"))
+            {
+                <li id="admin-roles"><a href="/Admin/Roles">Assign Roles</a></li>
+            }
+            <li id="admin-projects"><a href="/Admin/Projects">Assign Projects</a></li>
+        </ul>
+    </li>
+}
+@if (urh.IsUserInRole(userId, "Admin") || urh.IsUserInRole(userId, "Project Manager") || urh.IsUserInRole(userId, "Developer"))
+{
+    <li class="dropdown" id="projects-nav">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='fa fa-folder'></i> Projects <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li id="projects-dash"><a href="/Projects/Index">Projects Dashboard</a></li>
+            @if (urh.IsUserInRole(userId, "Admin") || urh.IsUserInRole(userId, "Project Manager"))
+            {
+                <li id="projects-create"><a href="/Projects/Create">Create New Project</a></li>
+                <li id="projects-edit"><a href="/Projects/IndexEdit">Edit Project</a></li>
+            }
+        </ul>
+    </li>
+}
+<li class="dropdown" id="tickets-nav">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='fa fa-ticket'></i> Tickets <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li id="tickets-dash"><a href="/Tickets/Index">Tickets Dashboard</a></li>
+        @if (urh.IsUserInRole(userId, "Admin") || urh.IsUserInRole(userId, "Submitter"))
+        {
+            <li id="tickets-create"><a href="/Tickets/Create">Create New Ticket</a></li>
+        }
+        @if (urh.IsUserInRole(userId, "Admin") || urh.IsUserInRole(userId, "Project Manager") || urh.IsUserInRole(userId, "Developer"))
+        {
+            <li id="tickets-edit"><a href="/Tickets/EditIndex"> Edit Ticket </a></li>
+        }
+    </ul>
+</li>
+

@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNet.Identity
+@using BugTracker.Helpers
+
+@if (Request.IsAuthenticated)
+{
+    var UserId = User.Identity.User().Id;
+    <li class="dropdown user-dropdown">
+        <a href="" style="text-decoration:none;" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-user"></i>
+            @if (DisplayHelper.FirstName(UserId) != null && DisplayHelper.LastName(UserId) != null)
+                {
+                @Html.Raw(DisplayHelper.FirstName(UserId) + " " + DisplayHelper.LastName(UserId) + " ")
+            }
+            else if (DisplayHelper.DisplayName(UserId) != null)
+            {
+                @Html.Raw(DisplayHelper.DisplayName(UserId) + " ")
+            }
+            else
+            {
+                @Html.Raw(User.Identity.Name + " ")
+            }
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="/Manage/Index" title="Manage Profile"><i class='fa fa-user'></i> Manage Profile</a></li>
+            @*<li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>*@
+            <li class="divider"></li>
+            <li>
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", style = "text-decoration:none;" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-power-off"></i> Log Out</a>
+                }
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="dropdown user-dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users"></i> User Accounts<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="/Account/Register" id="registerLink"><i class='fa fa-user-plus'></i> Register</a></li>
+            <li><a href="/Account/Login" id="loginLink"><i class='fa fa-sign-in'></i> Log in</a></li>
+        </ul>
+    </li>
+}

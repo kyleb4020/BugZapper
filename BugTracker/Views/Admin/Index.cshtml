@@ -1,0 +1,294 @@
+﻿@model BugTracker.Models.AdminDashboardVM
+@{
+    ViewBag.Title = "Admin Dashboard";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Ticket Statuses by Project</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="ticketProjects">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-pie-chart"></i> Ticket Statuses by Developer </h3>
+                </div>
+                <div class="panel-body">
+                    <div id="userTickets">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-pie-chart"></i> Ticket Statuses by Developer </h3>
+                </div>
+                <div class="panel-body">
+                    <div id="userPriorities">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Display Unassigned Tickets
+
+Display data visualization of ticket types logged and resolved per project and/or total
+
+Display ...I'll keep thinking*@
+
+<script>
+    $(document).ready(function () {
+
+        var catX = [];
+        var status1 = [];
+        var status2 = [];
+        var status3 = [];
+        var status4 = [];
+        var status5 = [];
+        function addCatX(category) {
+            catX.push(category);
+        };
+        function addStatus1(number) {
+            status1.push(number);
+        };
+        function addStatus2(number) {
+            status2.push(number);
+        };
+        function addStatus3(number) {
+            status3.push(number);
+        };
+        function addStatus4(number) {
+            status4.push(number);
+        };
+        function addStatus5(number) {
+            status5.push(number);
+        };
+        @foreach(var project in Model.Projects)
+        {
+            @:addCatX("@project.Name");
+            @:addStatus1(@project.Tickets.Where(t=>t.Status.Name == "Unassigned").Count())
+            @:addStatus2(@project.Tickets.Where(t=>t.Status.Name == "Assigned").Count())
+            @:addStatus3(@project.Tickets.Where(t=>t.Status.Name == "In Progress").Count())
+            @:addStatus4(@project.Tickets.Where(t=>t.Status.Name == "Testing").Count())
+            @:addStatus5(@project.Tickets.Where(t=>t.Status.Name == "Resolved").Count())
+        }
+
+        //new TicketStatus { Name = "Unassigned" },
+        //        new TicketStatus { Name = "Assigned" }, new TicketStatus { Name = "In Progress" },
+        //        new TicketStatus { Name = "Testing" }, new TicketStatus { Name = "Resolved" });
+
+        $("#ticketProjects").shieldChart({
+            theme: "dark",
+            primaryHeader: {
+                text: "Ticket Statuses by Project"
+            },
+            exportOptions: {
+                image: true,
+                print: true
+            },
+            axisX: {
+                categoricalValues: catX
+            },
+            axisY: {
+                title: {
+                    text: "Number of Tickets"
+                }
+            },
+            dataSeries: [{
+                seriesType: "bar",
+                collectionAlias: "Unassigned",
+                data: status1
+            }, {
+                seriesType: "bar",
+                collectionAlias: "Assigned",
+                data: status2
+            }, {
+                seriesType: "bar",
+                collectionAlias: "In Progress",
+                data: status3
+            }, {
+                seriesType: "bar",
+                collectionAlias: "Testing",
+                data: status4
+            }, {
+                seriesType: "bar",
+                collectionAlias: "Resolved",
+                data: status5
+            }]
+        });
+
+    var UTcatX = [];
+    var Tstatus1 = [];
+    var Tstatus2 = [];
+    var Tstatus3 = [];
+    var Tstatus4 = [];
+    var Tstatus5 = [];
+    function addUTCatX(category) {
+        UTcatX.push(category);
+    };
+    function addTStatus1(number) {
+        Tstatus1.push(number);
+    };
+    function addTStatus2(number) {
+        Tstatus2.push(number);
+    };
+    function addTStatus3(number) {
+        Tstatus3.push(number);
+    };
+    function addTStatus4(number) {
+        Tstatus4.push(number);
+    };
+    function addTStatus5(number) {
+        Tstatus5.push(number);
+    };
+        @foreach(var dev in Model.Developers)
+    {
+        @:addUTCatX("@dev.DisplayName");
+        @:addTStatus1(@dev.Tickets.Where(t=>t.Status.Name == "Unassigned").Count())
+        @:addTStatus2(@dev.Tickets.Where(t=>t.Status.Name == "Assigned").Count())
+        @:addTStatus3(@dev.Tickets.Where(t=>t.Status.Name == "In Progress").Count())
+        @:addTStatus4(@dev.Tickets.Where(t=>t.Status.Name == "Testing").Count())
+        @:addTStatus5(@dev.Tickets.Where(t=>t.Status.Name == "Resolved").Count())
+    }
+
+    $("#userTickets").shieldChart({
+        theme: "dark",
+        axisX: {
+            categoricalValues: UTcatX
+        },
+        seriesSettings: {
+            polarbar: {
+                stackMode: "percent"
+            }
+        },
+        primaryHeader: {
+            text: "Ticket Statuses by Developers"
+        },
+        chartLegend: {
+            align: "center",
+            verticalAlign: "top"
+        },
+        dataSeries: [{
+            seriesType: "polarbar",
+            collectionAlias: "Unassigned",
+            data: Tstatus1
+        }, {
+            seriesType: "polarbar",
+            collectionAlias: "Assigned",
+            data: Tstatus2
+        }, {
+            seriesType: "polarbar",
+            collectionAlias: "In Progress",
+            data: Tstatus3
+        }, {
+            seriesType: "polarbar",
+            collectionAlias: "Testing",
+            data: Tstatus4
+        }, {
+            seriesType: "polarbar",
+            collectionAlias: "Resolved",
+            data: Tstatus5
+        }]
+    });
+
+    var PcatX = [];
+    var priority1 = [];
+    var priority2 = [];
+    var priority3 = [];
+    var priority4 = [];
+    var priority5 = [];
+    var priority6 = [];
+    function addPCatX(category) {
+        PcatX.push(category);
+    };
+    function addPriority1(number) {
+        priority1.push(number);
+    };
+    function addPriority2(number) {
+        priority2.push(number);
+    };
+    function addPriority3(number) {
+        priority3.push(number);
+    };
+    function addPriority4(number) {
+        priority4.push(number);
+    };
+    function addPriority5(number) {
+        priority5.push(number);
+    };
+    function addPriority6(number) {
+        priority6.push(number);
+    };
+        @foreach(var dev in Model.Developers)
+    {
+        @:addPCatX("@dev.DisplayName");
+        @:addPriority1(@dev.Tickets.Where(t=>t.Priority.Name == "No Priority").Count())
+        @:addPriority2(@dev.Tickets.Where(t=>t.Priority.Name == "Low Priority").Count())
+        @:addPriority3(@dev.Tickets.Where(t=>t.Priority.Name == "Medium Priority").Count())
+        @:addPriority4(@dev.Tickets.Where(t=>t.Priority.Name == "High Priority").Count())
+        @:addPriority5(@dev.Tickets.Where(t=>t.Priority.Name == "Urgent").Count())
+        @:addPriority6(@dev.Tickets.Where(t=>t.Priority.Name == "Emergency").Count())
+    }
+
+        //new TicketPriority { Name = "No Priority" }, 
+        //        new TicketPriority { Name = "Low Priority" }, new TicketPriority { Name = "Medium Priority" }, 
+        //        new TicketPriority { Name = "High Priority" }, new TicketPriority { Name = "Urgent" },
+        //        new TicketPriority { Name = "Emergency" });
+    $("#userPriorities").shieldChart({
+        theme: "dark",
+        axisX: {
+            categoricalValues: PcatX
+        },
+        seriesSettings: {
+            polarbar: {
+                stackMode: "percent"
+            }
+        },
+        primaryHeader: {
+            text: "Ticket Priorities by Developers"
+        },
+        chartLegend: {
+            align: "center",
+            verticalAlign: "top"
+        },
+        dataSeries: [{
+            seriesType: "polarbar",
+            collectionAlias: "No Priority",
+            data: priority1
+        }, {
+            seriesType: "polarbar",
+            collectionAlias: "Low Priority",
+            data: priority2
+        }, {
+            seriesType: "polarbar",
+            collectionAlias: "Medium Priority",
+            data: priority3
+        }, {
+            seriesType: "polarbar",
+            collectionAlias: "High Priority",
+            data: priority4
+        }, {
+            seriesType: "polarbar",
+            collectionAlias: "Urgent",
+            data: priority5
+        }, {
+            seriesType: "polarbar",
+            collectionAlias: "Emergency",
+            data: priority6
+        }]
+    });
+    });
+</script>

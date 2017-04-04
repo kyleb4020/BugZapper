@@ -1,0 +1,148 @@
+﻿@model IEnumerable<IdentityRole>
+@using Microsoft.AspNet.Identity.EntityFramework;
+@using BugTracker.Helpers;
+@{
+    ViewBag.Title = "Roles";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1 text-center">
+            <h2>Roles</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                @foreach (var rl in Model)
+                {
+                    <div class="col-lg-6">
+                        <table class="table">
+                            <tr style="border-bottom:solid">
+                                <th colspan="2" style="text-align:center;">
+                                    <span style="font-size:1.15em;">@Html.DisplayFor(m => rl.Name)</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.Label("User")
+                                </th>
+                                <th>
+                                    @Html.Label("Projects(s)")
+                                </th>
+                            </tr>
+                            @foreach (var us in rl.Users)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.Raw(us.DisplayName())
+                                    </td>
+                                    <td>
+                                        @foreach (var pr in us.UserProjects())
+                                        {
+                                            if (pr != us.UserProjects().Last())
+                                            {
+                                                @Html.Raw(pr.Name + ", ")
+                                            }
+                                            else
+                                            {
+                                                @Html.Raw(pr.Name)
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="danger">@ViewBag.ErrorMessage</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            @using (Html.BeginForm("AssignRoles", "Admin", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <h4>Directions: Use the two lists below to quickly assign or unassign your team members to roles. @*Keep in mind, that you must select every role you wish a user to be on. <br />For example: If User1 has 3 roles, you need to assign User1 to all 3 roles in the same assignment. You cannot assign the roles one at a time.<br />However, if the same list of users occupy the same projects, you can assign all three of them to all of their projects as once.*@</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="form-group">
+                                @Html.Label("Select the Users:", htmlAttributes: new { @class = "col-md-12" })
+                                @Html.ListBox("Users", null)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 col-md-offset-1">
+                            <div class="form-group">
+                                @Html.Label("Select the Roles:", htmlAttributes: new { @class = "col-md-12" })
+                                @Html.ListBox("Roles", null)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10 text-center">
+                            <input type="submit" name="Selection" value="Assign Roles" class="btn btn-primary" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10 text-center">
+                            <input type="submit" name="Selection" value="Unassign Roles" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @*<div class="col-lg-6">
+            @using (Html.BeginForm("UnAssignRoles", "Admin", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <h4>Directions: Use the two lists below to quickly unassign your users from roles.</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="form-group">
+                                @Html.Label("Select the Users:", htmlAttributes: new { @class = "col-md-12" })
+                                @Html.ListBox("UnUsers", null)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="form-group">
+                                @Html.Label("Select the Roles:", htmlAttributes: new { @class = "col-md-12" })
+                                @Html.ListBox("UnRoles", null)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10 text-center">
+                            <input type="submit" value="Unassign Roles" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>*@
+    </div>
+</div>
+
+
+
+
+

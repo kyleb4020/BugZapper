@@ -1,0 +1,41 @@
+﻿@model BugTracker.Models.EmailModel
+
+@{
+    ViewBag.Title = "Contact";
+}
+<div class="container-fluid backdrop-gradient">
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-1">
+            <h2>@ViewBag.Title.</h2>
+            <h3>@ViewBag.Message</h3>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <h4>Enter your name and email below and I will get in touch with you</h4>
+                <hr />
+                <p style="font-weight:bold; color:lime;">@ViewBag.StatusMessage</p>
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FromName, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.FromName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.FromName)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FromEmail, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.FromEmail, new { @class = "form-control", placeholder = "example@email.com" })
+                        @Html.ValidationMessageFor(m => m.FromEmail)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn links-btn" value="Send" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

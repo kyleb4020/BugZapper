@@ -1,0 +1,174 @@
+﻿@model IEnumerable<BugTracker.Models.Project>
+@using Microsoft.AspNet.Identity.EntityFramework;
+@using BugTracker.Helpers;
+@{
+    ViewBag.Title = "Projects";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1 text-center">
+            <h2>Projects</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                @foreach (var pr in Model)
+                {
+                    <div class="col-lg-6">
+                        <table class="table">
+                            <tr style="border-bottom:solid">
+                                <th colspan="2" style="text-align:center;">
+                                    <span style="font-size:1.15em;">@Html.DisplayFor(m => pr.Name)</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    @Html.Label("User")
+                                </th>
+                                <th>
+                                    @Html.Label("Role(s)")
+                                </th>
+                            </tr>
+                            @foreach (var us in pr.Users)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.Raw(us.DisplayName)
+                                    </td>
+                                    <td>
+                                        @foreach (var ro in us.Roles)
+                                        {
+                                            if (ro != us.Roles.Last())
+                                            {
+                                                if (ro.RoleName() == "Project Manager")
+                                                {
+                                                    <span class="text-primary">@Html.Raw(ro.RoleName() + ", ")</span>
+                                                }
+                                                else if (ro.RoleName() == "Developer")
+                                                {
+                                                    <span class="text-success">@Html.Raw(ro.RoleName() + ", ")</span>
+                                                }
+                                                else if (ro.RoleName() == "Submitter")
+                                                {
+                                                    <span class="text-warning">@Html.Raw(ro.RoleName() + ", ")</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-info">@Html.Raw(ro.RoleName() + ", ")</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (ro.RoleName() == "Project Manager")
+                                                {
+                                                    <span class="text-primary">@Html.Raw(ro.RoleName())</span>
+                                                }
+                                                else if (ro.RoleName() == "Developer")
+                                                {
+                                                    <span class="text-success">@Html.Raw(ro.RoleName())</span>
+                                                }
+                                                else if (ro.RoleName() == "Submitter")
+                                                {
+                                                    <span class="text-warning">@Html.Raw(ro.RoleName())</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-info">@Html.Raw(ro.RoleName())</span>
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="danger">@ViewBag.ErrorMessage</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            @using (Html.BeginForm("AssignProjects", "Admin", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <h4>Directions: Use the two lists below to quickly assign/unassign your users to projects. @*Keep in mind, that you must select every project you wish a user to be on. <br />For example: If User1 is on 3 projects, you need to assign User1 to all 3 projects in the same assignment. You cannot assign the projects one at a time.*@</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="form-group">
+                                @Html.Label("Select the User(s)", htmlAttributes: new { @class = "col-md-12" })
+                                    @Html.ListBox("Users", null)
+                            </div>
+                        </div>
+                        </div>
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="form-group">
+                                @Html.Label("Select the Project(s)", htmlAttributes: new { @class = "col-md-12" })
+                                    @Html.ListBox("Projects", null)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10 text-center">
+                            <input type="submit" name="Selection" value="Assign to Project" class="btn btn-primary" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10 text-center">
+                            <input type="submit" name="Selection" value="Unassign from Project" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @*<div class="col-lg-6">
+            @using (Html.BeginForm("UnAssignProjects", "Admin", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <h4>Directions: Use the two lists below to quickly unassign your users to projects.</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="form-group">
+                                @Html.Label("Select the User(s)", htmlAttributes: new { @class = "col-md-12" })
+                                @Html.ListBox("UnUsers", null)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="form-group">
+                                @Html.Label("Select the Project(s)", htmlAttributes: new { @class = "col-md-12" })
+                                @Html.ListBox("UnProjects", null)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10 text-center">
+                            <input type="submit" value="UnAssign from Project" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>*@
+    </div>
+</div>
+
+

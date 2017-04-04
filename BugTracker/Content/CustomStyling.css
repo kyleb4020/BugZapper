@@ -1,0 +1,37 @@
+﻿#add-attachment-modal .modal-dialog{
+    width: 50%;
+    top: 15%;
+    border: solid;
+    border-width: 2px;
+    border-color:#cccccc;
+    border-radius:5px;
+    background: rgb(100, 100, 100); /* For browsers that do not support gradients */
+    background: -webkit-radial-gradient(rgb(100, 100, 100), rgb(25, 25, 25)); /* Safari 5.1 to 6.0 */
+    background: -o-radial-gradient(rgb(100, 100, 100), rgb(25, 25, 25)); /* For Opera 11.6 to 12.0 */
+    background: -moz-radial-gradient(rgb(100, 100, 100), rgb(25, 25, 25)); /* For Firefox 3.6 to 15 */
+    background: radial-gradient(rgb(100, 100, 100), rgb(25, 25, 25)); /* Standard syntax */
+    padding-top:1.5em;
+    padding-bottom:1.5em;
+}
+
+.light{
+    z-index:-1;
+    position:absolute;
+    bottom:5%;
+    left:5%;
+    width:90%;
+    -webkit-transition: opacity 2s; /* Safari */
+    transition: opacity 2s;
+}
+.dim{
+    opacity:.4;
+}
+.bright{
+    opacity:.8;
+}
+.zap{
+    opacity:1;
+}
+.cage{
+    z-index:200;
+}

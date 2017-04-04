@@ -1,0 +1,71 @@
+﻿@model IEnumerable<BugTracker.Models.Notification>
+@using BugTracker.Helpers
+
+<li class="dropdown messages-dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Notifications <span class="badge">@Html.Raw(Model.Where(n => n.Viewed == false).Count())</span> <b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li class="dropdown-header">@Html.Raw(Model.Where(n => n.Viewed == false).Count() + " Recent Notifications")</li>
+        @for (int i = 0; i < Model.Where(n => n.Viewed == false).Count(); i++)
+        {
+            var notice = Model.Where(n => n.Viewed == false).ToList()[i];
+            if (notice.Create.DateTime.AddDays(7) >= DateTime.Today)
+            {
+                <li class="message-preview">
+                    @using (Ajax.BeginForm("Viewed", "Notifications", FormMethod.Post, new AjaxOptions
+                    {
+                        AllowCache = false,
+                        InsertionMode = InsertionMode.Replace,
+                        HttpMethod = "POST",
+                        OnSuccess = "reloadNotification"
+                    }, new { id = "view_notice" + @i.ToString() }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="NoticeId" value="@notice.Id" />
+                            <input type="hidden" name="TicketId" value="@notice.TicketId" />
+                                <a href="#" id="notice_@i.ToString()">
+                                    <span class="avatar"><i class="fa fa-bell"></i></span>
+                                    <span class="message" style="font-weight:800;">@Html.Raw(notice.Description)</span>
+                                </a>
+                    }
+                </li>
+                    <li class="divider"></li>
+            }
+        }
+        @foreach (var note in Model.Where(n => n.Viewed == true))
+        {
+            if (note.Create.DateTime.AddDays(7) >= DateTime.Today)
+            {
+                <li class="message-preview">
+                    <a href="/Tickets/Details/@note.TicketId">
+                        <span class="avatar"><i class="fa fa-bell-o"></i></span>
+                        <span class="message">@Html.Raw(note.Description)</span>
+                    </a>
+                </li>
+                    <li class="divider"></li>
+            }
+        }
+
+
+        @*<li class="message-preview">
+                <a href = "#" >
+                    <span class="avatar"><i class="fa fa-bell"></i></span>
+                    <span class="message">Security alert</span>
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li><a href = "#" > Go to Inbox<span class="badge">2</span></a></li>*@
+    </ul>
+</li>
+
+    <script type="text/javascript">
+        function notices(i) {
+            $("#notice_" + i).click(function () {
+                $("#view_notice" + i).submit();
+            });
+        }
+
+        @for (var i = 0; i< Model.Where(n => n.Viewed == false).Count(); i++)
+        {
+            @:notices(@i);
+                }
+    </script>

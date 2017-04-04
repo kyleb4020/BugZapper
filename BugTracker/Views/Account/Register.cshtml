@@ -1,0 +1,89 @@
+﻿@model BugTracker.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<style>
+    div {
+        padding-bottom: 20px;
+    }
+</style>
+<div>
+    <div class="row text-center">
+        <h2>New Registration</h2>
+    </div>
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <label for="firstname" class="col-md-2">
+                First Name:
+            </label>
+            <div class="col-md-9">
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "Enter First Name" })
+            </div>
+            <div class="col-md-1">
+                <i class="fa fa-lock fa-2x"></i>
+            </div>
+        </div>
+        <div>
+            <label for="lastname" class="col-md-2">
+                Last Name:
+            </label>
+            <div class="col-md-9">
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Enter Last Name" })
+            </div>
+            <div class="col-md-1">
+                <i class="fa fa-lock fa-2x"></i>
+            </div>
+        </div>
+        <div>
+            <label for="emailaddress" class="col-md-2">
+                Email address:
+            </label>
+            <div class="col-md-9">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter email address" })
+                <p class="help-block">
+                    Example: yourname@domain.com
+                </p>
+            </div>
+            <div class="col-md-1">
+                <i class="fa fa-lock fa-2x"></i>
+            </div>
+        </div>
+        <div>
+            <label for="password" class="col-md-2">
+                Password:
+            </label>
+            <div class="col-md-9">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter Password" })
+                <p class="help-block">
+                    Min: 6 characters (At least one capital letter, number, and symbol: Ex. Sally123!)
+                </p>
+            </div>
+            <div class="col-md-1">
+                <i class="fa fa-lock fa-2x"></i>
+            </div>
+        </div>
+        <div>
+            <label for="password" class="col-md-2">
+                Confirm Password:
+            </label>
+            <div class="col-md-9">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password" })
+            </div>
+            <div class="col-md-1">
+                <i class="fa fa-lock fa-2x"></i>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-10">
+                <button type="submit" class="btn btn-primary">
+                    Register
+                </button>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,142 @@
+﻿@model BugTracker.Models.DashboardVM
+    @using BugTracker.Helpers
+@{ 
+    UserRolesHelpers urh = new UserRolesHelpers();
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1>Dashboard <small>Statistics and more</small></h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-pie-chart"></i> Ticket Statuses</h3>
+            </div>
+            <div class="panel-body">
+                <div id="shieldui-chart2"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-area-chart"></i> All New Tickets in Past 7 Days</h3>
+            </div>
+            <div class="panel-body">
+                <div id="shieldui-chart1">
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+   
+@if (urh.IsUserInRole(User.Identity.User().Id, "Admin") || urh.IsUserInRole(User.Identity.User().Id, "Project Manager") || urh.IsUserInRole(User.Identity.User().Id, "Developer"))
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Highest Priority Tickets </h3>
+                </div>
+                <div class="panel-body">
+                    <div id="shieldui-grid1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<!-- /#wrapper -->
+@section scripts{
+<script type="text/javascript">
+    $(document).ready(function () {
+        var daily = [
+            @Html.Raw(Model.AllTickets.Where(t => t.Created.DateTime.Date == DateTime.Today.AddDays(-7).Date).Count()),
+            @Html.Raw(Model.AllTickets.Where(t => t.Created.DateTime.Date == DateTime.Today.AddDays(-6).Date).Count()),
+            @Html.Raw(Model.AllTickets.Where(t => t.Created.DateTime.Date == DateTime.Today.AddDays(-5).Date).Count()),
+            @Html.Raw(Model.AllTickets.Where(t => t.Created.DateTime.Date == DateTime.Today.AddDays(-4).Date).Count()),
+            @Html.Raw(Model.AllTickets.Where(t => t.Created.DateTime.Date == DateTime.Today.AddDays(-3).Date).Count()),
+            @Html.Raw(Model.AllTickets.Where(t => t.Created.DateTime.Date == DateTime.Today.AddDays(-2).Date).Count()),
+            @Html.Raw(Model.AllTickets.Where(t => t.Created.DateTime.Date == DateTime.Today.AddDays(-1).Date).Count()),
+            @Html.Raw(Model.AllTickets.Where(t => t.Created.DateTime.Date == DateTime.Today.Date).Count())];
+
+        var tickets = [
+                ["Unassigned",@Html.Raw(Model.MyTickets.Where(t=>t.Status.Name == "Unassigned").Count())],
+                ["Assigned", @Html.Raw(Model.MyTickets.Where(t => t.Status.Name == "Assigned").Count())],
+                ["In Progress", @Html.Raw(Model.MyTickets.Where(t => t.Status.Name == "In Progress").Count())],
+                ["Testing", @Html.Raw(Model.MyTickets.Where(t => t.Status.Name == "Testing").Count())],
+                ["Resolved", @Html.Raw(Model.MyTickets.Where(t => t.Status.Name == "Resolved").Count())]];
+
+        var priority = [];
+
+        function addPriority(title, priorityName, date, project, status){
+            priority.push({Ticket: title, Priority: priorityName, Date_Created: date, Project: project, Status: status});
+        };
+
+        @foreach(var ticket in Model.MyTickets.Where(t => t.Priority.Name == "Emergency" || t.Priority.Name == "Urgent" || t.Priority.Name == "High Priority"))
+        {
+            @:addPriority('@ticket.Title', '@ticket.Priority.Name', '@ticket.Created.ToLocalTime().LocalDateTime', '@ticket.Project.Name', '@ticket.Status.Name');
+        }
+
+        $("#shieldui-chart1").shieldChart({
+            theme: "dark",
+
+            primaryHeader: {
+                text: "All Tickets Submitted in Past Week"
+            },
+            exportOptions: {
+                image: false,
+                print: false
+            },
+            axisX: {
+                categoricalValues: ["7d Ago", "6d Ago", "5d Ago", "4d Ago", "3d Ago", "2d Ago", "Yesterday", "Today"]
+            },
+            dataSeries: [{
+                seriesType: "area",
+                collectionAlias: "Submitted Tickets",
+                data: daily
+            }]
+        });
+
+        $("#shieldui-chart2").shieldChart({
+            theme: "dark",
+            primaryHeader: {
+                text: "Tickets by Status"
+            },
+            exportOptions: {
+                image: false,
+                print: false
+            },
+            dataSeries: [{
+                seriesType: "pie",
+                collectionAlias: "Status",
+                data: tickets
+            }]
+        });
+
+        $("#shieldui-grid1").shieldGrid({
+            theme: "dark",
+            dataSource: {
+                data: priority
+            },
+            sorting: {
+                multiple: true
+            },
+            rowHover: false,
+            paging: false,
+            columns: [
+            { field: "Ticket", width: "170px", title: "Ticket" },
+            { field: "Priority", title: "Priority" },
+            { field: "Date_Created", title: "Date Created" },
+            { field: "Project", title: "Project" },
+            { field: "Status", title: "Status" }
+            ]
+        });
+    });
+</script>
+}
