@@ -320,7 +320,7 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
-private.config
+
 BugTracker/[Ww]eb.[Dd]ebug.config
 BugTracker/[Ww]eb.[Rr]elease.config
 

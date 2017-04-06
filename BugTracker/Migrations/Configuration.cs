@@ -212,7 +212,7 @@ namespace BugTracker.Migrations
             context.TicketTypes.AddOrUpdate(tt => tt.Name, new TicketType { Name = "Default" }, new TicketType { Name = "Bug Fix" }, 
                 new TicketType { Name = "Project Task" }, new TicketType { Name = "Software Update" }, new TicketType { Name = "Maintenance" });
 
-
+            context.SaveChanges();
             //Create Demo Tickets *****THIS HAS TO BE DONE AFTER THE INITIAL SEED*****
             context.Tickets.AddOrUpdate(t => t.Title,
                 new Ticket
