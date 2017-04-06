@@ -323,7 +323,7 @@ __pycache__/
 private.config
 BugTracker/[Ww]eb.[Dd]ebug.config
 BugTracker/[Ww]eb.[Rr]elease.config
-BugTracker/[Ww]eb.config
+
 
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100

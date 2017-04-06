@@ -89,7 +89,7 @@ namespace BugTracker.Controllers
             //}
             //var DevList = uh.ListDevsOnMyProjects(userId);
             //var myTickets = th.ListUserTicketsInProjects(userId);
-            ticketVM.Tickets = tickets.OrderByDescending(t=>t.Created).ToList();
+            ticketVM.Tickets = tickets.OrderByDescending(t => t.Created).ToList();
             ticketVM.Project = projects.OrderByDescending(p => p.Name).ToList();
             //ticketVM.Users = users;
             //ViewBag.Developers = new SelectList(DevList, "Id", "DisplayName");
@@ -147,7 +147,7 @@ namespace BugTracker.Controllers
             //    }
             //}
             //var userList = uh.ListUsersOnMyProjects(userId);
-            var myTickets = th.ListUserTicketsInProjects(userId).OrderByDescending(t=>t.Created).ToList();
+            var myTickets = th.ListUserTicketsInProjects(userId).OrderByDescending(t => t.Created).ToList();
             ticketVM.Tickets = tickets.OrderByDescending(t => t.Created).ToList();
             ticketVM.Project = projects.OrderByDescending(p => p.Name).ToList();
             //ticketVM.Users = users;
@@ -240,28 +240,31 @@ namespace BugTracker.Controllers
                 db.SaveChanges();
                 //Now, to handle the attachments//
                 int num = 0;
-                foreach (var att in upload)
+                if (upload != null)
                 {
-                    Attachments attachments = new Attachments();
-                    if (ImageUploadValidator.IsWebFriendlyImage(att))
+                    foreach (var att in upload)
                     {
-                        var fileName = Path.GetFileName(att.FileName);
-                        att.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
-                        attachments.FileUrl = "/Uploads/" + fileName;
+                        Attachments attachments = new Attachments();
+                        if (ImageUploadValidator.IsWebFriendlyImage(att))
+                        {
+                            var fileName = Path.GetFileName(att.FileName);
+                            att.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                            attachments.FileUrl = "/Uploads/" + fileName;
+                        }
+                        else if (FileUploadValidator.IsFileAcceptableFormat(att))
+                        {
+                            var fileName = Path.GetFileName(att.FileName);
+                            att.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                            attachments.FileUrl = "/Uploads/" + fileName;
+                        }
+                        attachments.Description = AttachmentDescription[num];
+                        attachments.Created = DateTimeOffset.Now;
+                        attachments.UserId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id;
+                        attachments.TicketId = db.Tickets.Find(ticket.Id).Id;
+                        db.Attachments.Add(attachments);
+                        db.Tickets.Find(ticket.Id).Attachments.Add(attachments);
+                        num++;
                     }
-                    else if (FileUploadValidator.IsFileAcceptableFormat(att))
-                    {
-                        var fileName = Path.GetFileName(att.FileName);
-                        att.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
-                        attachments.FileUrl = "/Uploads/" + fileName;
-                    }
-                    attachments.Description = AttachmentDescription[num];
-                    attachments.Created = DateTimeOffset.Now;
-                    attachments.UserId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id;
-                    attachments.TicketId = db.Tickets.Find(ticket.Id).Id;
-                    db.Attachments.Add(attachments);
-                    db.Tickets.Find(ticket.Id).Attachments.Add(attachments);
-                    num++;
                 }
                 db.SaveChanges();
                 //if(Submit == "Add Attachment")
@@ -270,7 +273,7 @@ namespace BugTracker.Controllers
                 //}
                 //else if(Submit == "Create")
                 //{
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Tickets");
                 //}
             }
             //ViewBag.PriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.PriorityId);
@@ -453,6 +456,7 @@ namespace BugTracker.Controllers
                 //}
                 if (ticket.Due != null)
                 {
+                    Ticket.Due = ticket.Due.Value.UtcDateTime;
                     var history = th.CreateTicketHistory(UserId, Ticket.Id, "Due", Ticket.Due.Value.Date.ToShortDateString(), ticket.Due.Value.Date.ToShortDateString());
                     db.Histories.Add(history);
                     db.Tickets.Find(Ticket.Id).Histories.Add(history);
