@@ -21,6 +21,7 @@ namespace BugTracker.Models
         [Display(Name = "Display Name")]
         public string DisplayName { get; set; }
 
+        public int Offset { get; set; }
     }
 
     public class ExternalLoginListViewModel
@@ -73,6 +74,8 @@ namespace BugTracker.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        public int Offset { get; set; }
     }
 
     public class RegisterViewModel
@@ -105,6 +108,8 @@ namespace BugTracker.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public int Offset { get; set; }
     }
 
     public class ResetPasswordViewModel

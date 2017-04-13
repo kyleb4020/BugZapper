@@ -15,6 +15,7 @@
         using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl })) {
             @Html.AntiForgeryToken()
             <div id="socialLoginList">
+                <input class="hidden timezoneoffsetval" name="Offset" value="" />
                 <p>
                     @foreach (AuthenticationDescription p in loginProviders) {
                         <button type="submit" class="btn btn-danger" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>

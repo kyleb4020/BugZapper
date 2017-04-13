@@ -67,6 +67,7 @@
                                 </div>
                             </div>
                         </div>*@
+                    <input class="hidden timezoneoffsetval" name="Offset" value="" />
                     <div class="form-group">
                         <div class="col-md-8">
                             <input type="submit" value="Log in" class="btn btn-primary" />
@@ -96,6 +97,7 @@
                     @Html.AntiForgeryToken()
                     <input class="hidden" name="Email" value="krbbugtrackeradmin@mailinator.com" />
                     <input class="hidden" name="Password" value="DemoAdmin123!" />
+                    <input class="hidden timezoneoffsetval" name="Offset" value="" />
                     <div class="form-group">
                         <div class="col-md-12 text-center">
                             <input type="submit" value="Demo Admin" class="btn btn-success" />
@@ -109,6 +111,7 @@
                     @Html.AntiForgeryToken()
                     <input class="hidden" name="Email" value="krbbugtrackerpm1@mailinator.com" />
                     <input class="hidden" name="Password" value="DemoPM123!" />
+                    <input class="hidden timezoneoffsetval" name="Offset" value="" />
                     <div class="form-group">
                         <div class="col-md-12 text-center">
                             <input type="submit" value="Demo Project Manager" class="btn btn-success" />
@@ -122,6 +125,7 @@
                     @Html.AntiForgeryToken()
                     <input class="hidden" name="Email" value="krbbugtrackerdev1@mailinator.com" />
                     <input class="hidden" name="Password" value="DemoDev123!" />
+                    <input class="hidden timezoneoffsetval" name="Offset" value="" />
                     <div class="form-group">
                         <div class="col-md-12 text-center">
                             <input type="submit" value="Demo Developer" class="btn btn-success" />
@@ -135,6 +139,7 @@
                     @Html.AntiForgeryToken()
                     <input class="hidden" name="Email" value="krbbugtrackersub@mailinator.com" />
                     <input class="hidden" name="Password" value="DemoSub123!" />
+                    <input class="hidden timezoneoffsetval" name="Offset" value="" />
                     <div class="form-group">
                         <div class="col-md-12 text-center">
                             <input type="submit" value="Demo Submitter" class="btn btn-success" />
@@ -147,5 +152,9 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+        var offset = new Date().getTimezoneOffset();
+        $(".timezoneoffsetval").val(offset);
+    </script>
 </body>
 </html>

@@ -156,5 +156,11 @@ namespace BugTracker.Helpers
         {
             return db.Users.Find(userId);
         }
+
+        public static DateTimeOffset AdjustTime(DateTimeOffset currentDateTime, int Offset)
+        {
+            DateTimeOffset AdjustedTime = currentDateTime.ToUniversalTime().AddMinutes(-Offset);
+            return AdjustedTime;
+        }
     }
 }

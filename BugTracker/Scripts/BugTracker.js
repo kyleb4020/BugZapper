@@ -42,6 +42,7 @@ $(document).ready(function () {
     $("#PMId").multiselect();
     $("#StatusId").multiselect();
     $("#PriorityId").multiselect();
+    $.fn.dataTable.moment('D/M/YY h:mm:ss a');
     $("#my_projects").DataTable({
         dom: 'Blfrtip',
         buttons: [
@@ -49,6 +50,7 @@ $(document).ready(function () {
         ],
         responsive: true
     });
+    //$.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
     $("#all_projects").DataTable({
         dom: 'Blfrtip',
         buttons: [
@@ -56,6 +58,7 @@ $(document).ready(function () {
         ],
         responsive: true
     });
+    //$.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
     $("#project_tickets").DataTable({
         dom: 'Blfrtip',
         buttons: [
@@ -63,6 +66,7 @@ $(document).ready(function () {
         ],
         responsive: true
     });
+    //$.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
     $("#my_tickets").DataTable({
         dom: 'Blfrtip',
         buttons: [
@@ -70,6 +74,7 @@ $(document).ready(function () {
         ],
         responsive: true
     });
+    //$.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
     $("#sub_tickets").DataTable({
         dom: 'Blfrtip',
         buttons: [

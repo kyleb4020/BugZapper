@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using DevTrends.MvcDonutCaching;
 using BugTracker.Models;
+using System.Data.Entity;
 
 namespace BugTracker.Controllers
 {
@@ -81,6 +82,11 @@ namespace BugTracker.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    var user = db.Users.First(u => u.UserName == model.Email);
+                    user.Offset = model.Offset;
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
                     //return RedirectToLocal(returnUrl);
                     return RedirectToAction("Index", "Home");
                 case SignInStatus.LockedOut:
@@ -154,7 +160,7 @@ namespace BugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, Offset = model.Offset };
                 user.DisplayName = model.FirstName.Substring(0, 1) + model.LastName;
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -315,10 +321,10 @@ namespace BugTracker.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
+        public ActionResult ExternalLogin(string provider, string returnUrl, int Offset)
         {
             // Request a redirect to the external login provider
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl, Offset = Offset }));
         }
 
         //
@@ -359,7 +365,7 @@ namespace BugTracker.Controllers
         //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
+        public async Task<ActionResult> ExternalLoginCallback(string returnUrl, int Offset)
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
@@ -372,6 +378,11 @@ namespace BugTracker.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    var user = db.Users.First(u => u.UserName == loginInfo.Email);
+                    user.Offset = Offset;
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -406,7 +417,7 @@ namespace BugTracker.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, DisplayName = model.DisplayName };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, DisplayName = model.DisplayName, Offset = model.Offset };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

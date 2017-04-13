@@ -73,7 +73,7 @@
                     </dt>
 
                     <dd>
-                        @Html.Raw(Model.Ticket.Created.ToLocalTime().LocalDateTime)
+                        @Html.Raw(DisplayHelper.AdjustTime(Model.Ticket.Created,User.Identity.User().Offset).DateTime)
                     </dd>
                     @if (Model.Ticket.Updated != null)
                     {
@@ -82,7 +82,7 @@
                         </dt>
 
                         <dd>
-                            @Html.Raw(Model.Ticket.Updated.Value.ToLocalTime().LocalDateTime)
+                            @Html.Raw(DisplayHelper.AdjustTime(Model.Ticket.Updated.Value,User.Identity.User().Offset).DateTime)
                         </dd>
                     }
                     <dt>
@@ -207,7 +207,7 @@
                     }
                     <p align="left">@Html.Raw(item.Description)</p>
                     <p align="right">@Html.Raw(item.User.DisplayName)</p>
-                    <p align="right">@Html.Raw(item.Created.ToLocalTime().LocalDateTime)</p>
+                    <p align="right">@Html.Raw(DisplayHelper.AdjustTime(item.Created,User.Identity.User().Offset).DateTime)</p>
                 </div>
                 @*@if (User.IsInRole("Moderator") || User.IsInRole("Admin"))
                     {
@@ -235,7 +235,7 @@
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="timeline-title">Property: @Html.Raw(item.Property)</h4>
-                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(item.Changed.ToLocalTime().LocalDateTime)</span>
+                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(DisplayHelper.AdjustTime(item.Changed,User.Identity.User().Offset).DateTime)</span>
                                 <hr />
                             </div>
                             <div class="timeline-body">
@@ -253,7 +253,7 @@
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="timeline-title">Property: @Html.Raw(item.Property)</h4>
-                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(item.Changed.ToLocalTime().LocalDateTime)</span>
+                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(DisplayHelper.AdjustTime(item.Changed,User.Identity.User().Offset).DateTime)</span>
                                 <hr />
                             </div>
                             <div class="timeline-body">
@@ -271,7 +271,7 @@
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="timeline-title">Property: @Html.Raw(item.Property)</h4>
-                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(item.Changed.ToLocalTime().LocalDateTime)</span>
+                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(DisplayHelper.AdjustTime(item.Changed,User.Identity.User().Offset).DateTime)</span>
                                 <hr />
                             </div>
                             <div class="timeline-body">

@@ -101,12 +101,12 @@
                             }
                         </td>
                         <td>
-                            @Html.Raw(ti.Created.ToLocalTime().LocalDateTime)
+                            @Html.Raw(DisplayHelper.AdjustTime(ti.Created,User.Identity.User().Offset).DateTime)
                         </td>
                         <td>
                             @if (ti.Updated != null)
                             {
-                            @Html.Raw(ti.Updated.Value.ToLocalTime().LocalDateTime)
+                            @Html.Raw(DisplayHelper.AdjustTime(ti.Updated.Value,User.Identity.User().Offset).DateTime)
                             }
                         </td>
                         <td>

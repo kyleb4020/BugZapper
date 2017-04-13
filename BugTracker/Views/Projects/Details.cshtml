@@ -32,7 +32,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Created)
+            @Html.Raw(DisplayHelper.AdjustTime(Model.Created, User.Identity.User().Offset).DateTime)
         </dd>
 
         <dt>
@@ -40,7 +40,10 @@
         </dt>
 
         <dd>
-            @Html.Raw(DisplayHelper.User(Model.PMId).DisplayName)
+            @if (Model.PMId != null)
+            {
+                @Html.Raw(DisplayHelper.User(Model.PMId).DisplayName)
+            }
         </dd>
 
     </dl>

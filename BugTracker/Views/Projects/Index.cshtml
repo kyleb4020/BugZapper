@@ -52,7 +52,7 @@
                                     @Html.DisplayFor(modelItem => item.Description)
                                 </td>
                                 <td>
-                                    @Html.Raw(item.Created.ToLocalTime().LocalDateTime)
+                                    @Html.Raw(DisplayHelper.AdjustTime(item.Created,User.Identity.User().Offset).DateTime)
                                 </td>
                                 <td>
                                     @Html.Raw(item.Tickets.Count)
@@ -114,7 +114,7 @@
                                     @Html.DisplayFor(modelItem => item.Description)
                                 </td>
                                 <td>
-                                    @Html.Raw(item.Created.ToLocalTime().LocalDateTime)
+                                    @Html.Raw(DisplayHelper.AdjustTime(item.Created,User.Identity.User().Offset).DateTime)
                                 </td>
                                 <td>
                                     @Html.Raw(item.Tickets.Count)
