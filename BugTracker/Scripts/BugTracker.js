@@ -27,6 +27,15 @@ $.ajaxSetup({
 });
 
 $(document).ready(function () {
+    $(".cage").hover(function () {
+        $(".light").removeClass("dim", "bright");
+        $(".light").addClass("zap");
+    });
+    $(".cage").mouseleave(function () {
+        $(".light").removeClass("zap");
+        $(".light").addClass("dim");
+    });
+    glow();
     $("#Projects").multiselect();
     //$("#UnProjects").multiselect();
     $("#Users").multiselect();
@@ -42,46 +51,7 @@ $(document).ready(function () {
     $("#PMId").multiselect();
     $("#StatusId").multiselect();
     $("#PriorityId").multiselect();
-    $.fn.dataTable.moment('D/M/YY h:mm:ss a');
-    $("#my_projects").DataTable({
-        dom: 'Blfrtip',
-        buttons: [
-            'colvis'
-        ],
-        responsive: true
-    });
-    //$.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
-    $("#all_projects").DataTable({
-        dom: 'Blfrtip',
-        buttons: [
-            'colvis'
-        ],
-        responsive: true
-    });
-    //$.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
-    $("#project_tickets").DataTable({
-        dom: 'Blfrtip',
-        buttons: [
-            'colvis'
-        ],
-        responsive: true
-    });
-    //$.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
-    $("#my_tickets").DataTable({
-        dom: 'Blfrtip',
-        buttons: [
-            'colvis'
-        ],
-        responsive: true
-    });
-    //$.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
-    $("#sub_tickets").DataTable({
-        dom: 'Blfrtip',
-        buttons: [
-            'colvis'
-        ],
-        responsive: true
-    });
+
     $("#comments-title").click(function () {
         $("#comments-list").animate({
             height: "toggle"
@@ -106,15 +76,7 @@ $(document).ready(function () {
         $("#add_attachment_form").append('<label class="control-label col-md-2">Upload Attachment</label><div class="col-md-10"><input name="upload[' + num + ']" type="file" class="form-control" id="fileUpload" /><p class="text-primary" style="font-weight:bold">Accepted file types: .pdf .doc .docx .zip .txt .rtf .jpg .jpeg .png .gif</p></div><label class="control-label col-md-2">Attachment Description</label><div class="col-md-10"><textarea class="form-control" name="AttachmentDescription"></textarea></div>')
         num++;
     });
-    $(".cage").hover(function () {
-        $(".light").removeClass("dim", "bright");
-        $(".light").addClass("zap");
-    });
-    $(".cage").mouseleave(function () {
-        $(".light").removeClass("zap");
-        $(".light").addClass("dim");
-    })
-    glow();
+    
     $(".side-nav li").on("click", function () {
         $(".side-nav li").removeClass("selected");
         $(this).addClass("selected");
@@ -186,4 +148,46 @@ $(document).ready(function () {
         $("#tickets-nav").addClass("selected open");
         $("#tickets-edit").addClass("selected");
     }
+
+
+    $.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
+    $("#my_projects").DataTable({
+        dom: 'Blfrtip',
+        buttons: [
+            'colvis'
+        ],
+        responsive: true
+    });
+    $.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
+    $("#all_projects").DataTable({
+        dom: 'Blfrtip',
+        buttons: [
+            'colvis'
+        ],
+        responsive: true
+    });
+    $.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
+    $("#project_tickets").DataTable({
+        dom: 'Blfrtip',
+        buttons: [
+            'colvis'
+        ],
+        responsive: true
+    });
+    $.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
+    $("#my_tickets").DataTable({
+        dom: 'Blfrtip',
+        buttons: [
+            'colvis'
+        ],
+        responsive: true
+    });
+    $.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
+    $("#sub_tickets").DataTable({
+        dom: 'Blfrtip',
+        buttons: [
+            'colvis'
+        ],
+        responsive: true
+    });
 });

@@ -130,10 +130,9 @@ namespace BugTracker.Controllers
 
                         db.Entry(user).State = EntityState.Modified; //EntityState.Modified says that if anything has changed, you updated all values in the table for this case.
                     }
-
-                    if (!uh.IsUserInRole(db.Users.FirstOrDefault(us => us.UserName == "kyle.r.bartholomew@gmail.com").Id, "Admin"))
+                    if (!uh.IsUserInRole(db.Users.FirstOrDefault(us => us.UserName == "krbbugtrackeradmin@mailinator.com").Id, "Admin"))
                     {
-                        uh.AddUserToRole(db.Users.FirstOrDefault(us => us.UserName == "kyle.r.bartholomew@gmail.com").Id, "Admin");
+                        uh.AddUserToRole(db.Users.FirstOrDefault(us => us.UserName == "krbbugtrackeradmin@mailinator.com").Id, "Admin");
                     }
 
                     db.SaveChanges();
