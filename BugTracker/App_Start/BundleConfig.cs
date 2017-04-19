@@ -24,11 +24,15 @@ namespace BugTracker
                       "~/Scripts/respond.js",
                       "~/Scripts/BugTracker.js",
                       "~/Scripts/bootstrap-multiselect.js",
+                      "~/Scripts/bootstrap-markdown.js",
                       "~/Scripts/jquery.dataTables.min.js",
                       "~/Scripts/dataTables.responsive.min.js",
                       "~/Scripts/dataTables.buttons.min.js",
+                      "~/Scripts/moment.js",
+                      "~/Scripts/datetime-moment.js",
                       "~/Scripts/buttons.colVis.min.js",
-                      "~/Scripts/morris.js"));
+                      "~/Scripts/morris.js",
+                      "~/Scripts/DataTables.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
@@ -37,6 +41,7 @@ namespace BugTracker
                       "~/Content/local.css",
                       "~/Content/font-awesome.css",
                       "~/Content/bootstrap-multiselect.css",
+                      "~/Content/bootstrap-markdown.min.css",
                       "~/Content/jquery.dataTables.min.css",
                       "~/Content/responsive.dataTables.min.css",
                       "~/Content/buttons.dataTables.min.css",

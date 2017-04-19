@@ -7,162 +7,242 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-12 text-center">
-            <h2>Ticket Details</h2>
+        <div class="col-lg-8 text-center">
+            <h2>@Html.DisplayFor(model => model.Ticket.Title)</h2>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-12">
-            <div>
-                <h4>@Html.DisplayFor(model => model.Ticket.Title)</h4>
-                <hr />
-                <dl class="dl-horizontal">
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Ticket.Description)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Ticket.Description)
-                    </dd>
-                    @if (urh.IsUserInRole(User.Identity.User().Id, "Admin") || urh.IsUserInRole(User.Identity.User().Id, "Project Manager") || urh.IsUserInRole(User.Identity.User().Id, "Developer"))
-                    {
-                        <dt>
-                            @Html.Label("Priority")
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.Ticket.Priority.Name)
-                        </dd>
-
-                        <dt>
-                            @Html.Label("Types")
-                        </dt>
-
-                        <dd>
-                            @foreach (var ty in Model.Ticket.Type)
-                            {
-                                if (ty != Model.Ticket.Type.Last())
-                                {
-                                    @Html.Raw(ty.Name + ", ")
-                                }
-                                else
-                                {
-                                    @Html.Raw(ty.Name)
-                                }
-                            }
-                        </dd>
-
-                        <dt>
-                            @Html.Label("Project")
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.Ticket.Project.Name)
-                        </dd>
-                    }
-                    <dt>
-                        @Html.Label("Status")
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Ticket.Status.Name)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Ticket.Created)
-                    </dt>
-
-                    <dd>
-                        @Html.Raw(DisplayHelper.AdjustTime(Model.Ticket.Created,User.Identity.User().Offset).DateTime)
-                    </dd>
-                    @if (Model.Ticket.Updated != null)
-                    {
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Ticket.Updated)
-                        </dt>
-
-                        <dd>
-                            @Html.Raw(DisplayHelper.AdjustTime(Model.Ticket.Updated.Value,User.Identity.User().Offset).DateTime)
-                        </dd>
-                    }
-                    <dt>
-                        @Html.Label("Project Manager")
-                    </dt>
-
-                    <dd>
-                        @if (Model.Ticket.PMId != null)
-                        {
-                            @Html.Raw(DisplayHelper.FirstName(Model.Ticket.PMId) + " " + DisplayHelper.LastName(Model.Ticket.PMId))
-                        }
-                    </dd>
-
-                    @if (urh.IsUserInRole(User.Identity.User().Id, "Admin") || urh.IsUserInRole(User.Identity.User().Id, "Project Manager") || urh.IsUserInRole(User.Identity.User().Id, "Developer"))
-                    {
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Ticket.Due)
-                        </dt>
-
-                        <dd>
-                            @if (Model.Ticket.Due != null)
-                            {
-                                @Html.Raw(Model.Ticket.Due.Value.DateTime.ToShortDateString())
-                            }
-                        </dd>
-
-                        <dt>
-                            @Html.Label("Developer")
-                        </dt>
-
-                        <dd>
-                            @if (Model.Ticket.DeveloperId != null)
-                            {
-                                @Html.Raw(DisplayHelper.DisplayName(Model.Ticket.DeveloperId))
-                            }
-                        </dd>
-                    }
-
-                    <dt>
-                        @Html.Label("Ticket Owner")
-                    </dt>
-
-                    <dd>
-                        @Html.Raw(DisplayHelper.DisplayName(Model.Ticket.OwnerUserId))
-                    </dd>
-
-                </dl>
+        <div class="col-lg-8">
+            <div class="row ticket-details-row">
+                <div class="col-lg-12">
+                    <h4>@Html.DisplayFor(model => model.Ticket.Description)</h4>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="row" style="margin-top:1.5em">
-        <div class="col-lg-2">
-            <h4>@ViewBag.Error</h4>
-            <h5>Add New Comment:</h5>
-        </div>
-        <div class="col-lg-6" style="padding-top:1em">
-            @using (Html.BeginForm("Create", "Comments", FormMethod.Post, new { @class = "form-horizontal" }))
+            @if (urh.IsUserInRole(User.Identity.User().Id, "Admin") || urh.IsUserInRole(User.Identity.User().Id, "Project Manager") || urh.IsUserInRole(User.Identity.User().Id, "Developer"))
             {
-                @Html.AntiForgeryToken()
-                //Id,AuthorId,BlogPostId,Created,Modified,ModifiedNote,Body,ProfilePicURL,Private
-                <input type="hidden" name="TicketId" value="@Model.Ticket.Id" />
-                <div class="form-group">
-                    <label></label>
-                    <div class="col-md-10">
-                        <textarea name="Body" class="form-control form-gradient" required></textarea>
+                <div class="row ticket-details-row">
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @Html.Label("Priority")
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @if (Model.Ticket.Priority.Name == "No Priority")
+                                {
+                                    @Html.DisplayFor(model => model.Ticket.Priority.Name)
+                                }
+                                else if(Model.Ticket.Priority.Name == "Low Priority")
+                                {
+                                    <span class="low-priority">@Html.DisplayFor(model => model.Ticket.Priority.Name)</span>
+                                }
+                                else if (Model.Ticket.Priority.Name == "Medium Priority")
+                                {
+                                    <span class="medium-priority">@Html.DisplayFor(model => model.Ticket.Priority.Name)</span>
+                                }
+                                else if (Model.Ticket.Priority.Name == "High Priority")
+                                {
+                                    <span class="text-warning">@Html.DisplayFor(model => model.Ticket.Priority.Name)</span>
+                                }
+                                else if (Model.Ticket.Priority.Name == "Urgent")
+                                {
+                                    <span class="text-danger">@Html.DisplayFor(model => model.Ticket.Priority.Name)</span>
+                                }
+                                else if (Model.Ticket.Priority.Name == "Emergency")
+                                {
+                                    <span class="emergency">@Html.DisplayFor(model => model.Ticket.Priority.Name)</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @Html.Label("Types")
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @foreach (var ty in Model.Ticket.Type)
+                                {
+                                    if (ty != Model.Ticket.Type.Last())
+                                    {
+                                        @Html.Raw(ty.Name + ", ")
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw(ty.Name)
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @Html.Label("Project")
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @Html.DisplayFor(model => model.Ticket.Project.Name)
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" class="btn btn-default">Submit</button>
+                <div class="row ticket-details-row">
+
+
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @Html.LabelFor(model => model.Ticket.Due)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @if (Model.Ticket.Due != null)
+                                {
+                                    @Html.Raw(Model.Ticket.Due.Value.DateTime.ToShortDateString())
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @Html.Label("Developer")
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @if (Model.Ticket.DeveloperId != null)
+                                {
+                                    @Html.Raw(DisplayHelper.DisplayName(Model.Ticket.DeveloperId))
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             }
+            <div class="row ticket-details-row">
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @Html.Label("Status")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @Html.DisplayFor(model => model.Ticket.Status.Name)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @Html.LabelFor(model => model.Ticket.Created)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @Html.Raw(DisplayHelper.AdjustTime(Model.Ticket.Created, User.Identity.User().Offset).DateTime)
+                        </div>
+                    </div>
+                </div>
+                @if (Model.Ticket.Updated != null)
+                {
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @Html.LabelFor(model => model.Ticket.Updated)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @Html.Raw(DisplayHelper.AdjustTime(Model.Ticket.Updated.Value, User.Identity.User().Offset).DateTime)
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="row ticket-details-row">
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @Html.Label("Project Manager")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @if (Model.Ticket.PMId != null)
+                            {
+                                @Html.Raw(DisplayHelper.FirstName(Model.Ticket.PMId) + " " + DisplayHelper.LastName(Model.Ticket.PMId))
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @Html.Label("Ticket Owner")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @Html.Raw(DisplayHelper.DisplayName(Model.Ticket.OwnerUserId))
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>@ViewBag.Error</h4>
+                            <h5>Add New Comment:</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @using (Html.BeginForm("Create", "Comments", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="TicketId" value="@Model.Ticket.Id" />
+                                <div class="form-group">
+                                    <label></label>
+                                    <div class="col-md-12">
+                                        <textarea name="Body" class="form-control form-gradient" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <button type="submit" class="btn btn-default">Submit</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button href="#add-attachment-modal" type="button" data-toggle="modal" class="btn btn-default">Add New Attachment</button>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            <div class="row" style="margin-bottom:1em; margin-top:1em;">
+                <div class="col-lg-12">
+                    <button class="btn btn-default" style="font-size:1em; margin-bottom:.25em;" id="comments-title">@Html.Raw("Comments <span class='badge'>" + Model.Ticket.Comments.Count + "</span>")</button>
+                    <button class="btn btn-default" style="font-size:1em; margin-bottom:.25em;" id="attachments-title">@Html.Raw("Attachments <span class='badge'>" + Model.Ticket.Attachments.Count + "</span>")</button>
+                    <button class="btn btn-default" style="font-size:1em; margin-bottom:.25em;" id="history-title">History</button>
+                </div>
+            </div>           
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12 text-left">
-            <button class="btn btn-default" style="font-size:1em" id="comments-title">Comments</button>
-        </div>
-    </div>
+    
     <div id="comments-list" style="display:none">
         @foreach (var item in Model.Ticket.Comments.Reverse())
         {
@@ -172,25 +252,8 @@
                     <p align="right">@Html.Raw(item.User.DisplayName)</p>
                     <p align="right">@Html.Raw(item.Created.ToLocalTime().LocalDateTime)</p>
                 </div>
-                @*@if (User.IsInRole("Moderator") || User.IsInRole("Admin"))
-                    {
-                        <div class="col-lg-2">
-                            @Html.ActionLink("Edit", "Edit", "Comments", new { id = item.Id }, new { @class = "links-btn btn" })
-                            @Html.ActionLink("Delete", "Delete", "Comments", new { id = item.Id }, new { @class = "links-btn btn" })
-                        </div>
-                    }*@
             </div>
         }
-    </div>
-    <div class="row" style="margin-top:1em;">
-        <div class="col-md-10">
-            <button href="#add-attachment-modal" type="button" data-toggle="modal" class="btn btn-default">Add New Attachment</button>
-        </div>
-    </div>
-    <div class="row" style="margin-top:1em;">
-        <div class="col-lg-12 text-left">
-            <button class="btn btn-default" style="font-size:1em" id="attachments-title">Attachments</button>
-        </div>
     </div>
     <div id="attachments-list" style="display:none">
         @foreach (var item in Model.Ticket.Attachments.Reverse())
@@ -207,22 +270,10 @@
                     }
                     <p align="left">@Html.Raw(item.Description)</p>
                     <p align="right">@Html.Raw(item.User.DisplayName)</p>
-                    <p align="right">@Html.Raw(DisplayHelper.AdjustTime(item.Created,User.Identity.User().Offset).DateTime)</p>
+                    <p align="right">@Html.Raw(DisplayHelper.AdjustTime(item.Created, User.Identity.User().Offset).DateTime)</p>
                 </div>
-                @*@if (User.IsInRole("Moderator") || User.IsInRole("Admin"))
-                    {
-                        <div class="col-lg-2">
-                            @Html.ActionLink("Edit", "Edit", "Comments", new { id = item.Id }, new { @class = "links-btn btn" })
-                            @Html.ActionLink("Delete", "Delete", "Comments", new { id = item.Id }, new { @class = "links-btn btn" })
-                        </div>
-                    }*@
             </div>
         }
-    </div>
-    <div class="row">
-        <div class="col-lg-12 text-left" style="margin-top:1em;">
-            <button class="btn btn-default" style="font-size:1em" id="history-title">History</button>
-        </div>
     </div>
     <div id="history-list" style="display:none">
         <ul class="timeline">
@@ -235,7 +286,7 @@
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="timeline-title">Property: @Html.Raw(item.Property)</h4>
-                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(DisplayHelper.AdjustTime(item.Changed,User.Identity.User().Offset).DateTime)</span>
+                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(DisplayHelper.AdjustTime(item.Changed, User.Identity.User().Offset).DateTime)</span>
                                 <hr />
                             </div>
                             <div class="timeline-body">
@@ -253,7 +304,7 @@
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="timeline-title">Property: @Html.Raw(item.Property)</h4>
-                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(DisplayHelper.AdjustTime(item.Changed,User.Identity.User().Offset).DateTime)</span>
+                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(DisplayHelper.AdjustTime(item.Changed, User.Identity.User().Offset).DateTime)</span>
                                 <hr />
                             </div>
                             <div class="timeline-body">
@@ -271,7 +322,7 @@
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="timeline-title">Property: @Html.Raw(item.Property)</h4>
-                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(DisplayHelper.AdjustTime(item.Changed,User.Identity.User().Offset).DateTime)</span>
+                                <span style="font-size:1.15em"><i class="fa fa-clock-o"></i>&nbsp;@Html.Raw(DisplayHelper.AdjustTime(item.Changed, User.Identity.User().Offset).DateTime)</span>
                                 <hr />
                             </div>
                             <div class="timeline-body">
@@ -282,31 +333,12 @@
                         </div>
                     </li>
                 }
-                @*<div class="row">
-                    <div class="col-lg-12" style="border-top:solid; border-width:1px; padding-top:1em">
-                        <p align="left">Property: @Html.Raw(item.Property)</p>
-                        <p align="left">Previous Value: @Html.Raw(item.OldValue)</p>
-                        <p align="left">New Value: @Html.Raw(item.NewValue)</p>
-                        <p align="right">Change by: @Html.Raw(item.User.DisplayName)</p>
-                        <p align="right">@Html.DisplayFor(model => item.Changed.LocalDateTime)</p>
-                    </div>*@
-                @*@if (User.IsInRole("Moderator") || User.IsInRole("Admin"))
-                    {
-                        <div class="col-lg-2">
-                            @Html.ActionLink("Edit", "Edit", "Comments", new { id = item.Id }, new { @class = "links-btn btn" })
-                            @Html.ActionLink("Delete", "Delete", "Comments", new { id = item.Id }, new { @class = "links-btn btn" })
-                        </div>
-                    }*@
-                @*</div>*@
             }
         </ul>
     </div>
-    <div class="row" style="margin-top:1em;">
+    <div class="row" style="margin-top:2em;">
         <div class="col-lg-12">
-            @*@if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Developer"))
-                {*@
             @Html.ActionLink("Edit", "Edit", new { id = Model.Ticket.Id }, new { @class = "btn btn-default" })
-            @*}*@
             @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
         </div>
     </div>
@@ -329,14 +361,6 @@
                 <h4>Attachment</h4>
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @*<div class="form-group">
-                        @Html.LabelFor(model => model.Attachment.FilePath, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Attachment.FilePath, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Attachment.FilePath, "", new { @class = "text-danger" })
-                        </div>
-                    </div>*@
-
                 <div class="form-group">
                     @Html.Label("Upload Attachment", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -353,41 +377,7 @@
                         @Html.ValidationMessageFor(model => model.Attachment.Description, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
-                @*<div class="form-group">
-                        @Html.LabelFor(model => model.Attachment.Created, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Attachment.Created, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Attachment.Created, "", new { @class = "text-danger" })
-                        </div>
-                    </div>*@
-
-                @*<div class="form-group">
-                        @Html.Label("Upload Attachment", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Attachment.FileUrl, new { htmlAttributes = new { @class = "form-control" } })
-                            <input name="attachment" type="file" class="form-control" id="fileUpload" />
-                            @Html.ValidationMessageFor(model => model.Attachment.FileUrl, "", new { @class = "text-danger" })
-                        </div>
-                    </div>*@
-
                 <input type="hidden" name="TicketId" value="@Model.Ticket.Id" />
-                @*<div class="form-group">
-                        @Html.LabelFor(model => model.Attachments.TicketId, "TicketId", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownList("TicketId", null, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Attachments.TicketId, "", new { @class = "text-danger" })
-                        </div>
-                    </div>*@
-
-                @*<div class="form-group">
-                        @Html.LabelFor(model => model.Attachment.UserId, "UserId", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Attachment.UserId, "", new { @class = "text-danger" })
-                        </div>
-                    </div>*@
-
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" name="Submit" value="Add New Attachment" class="btn btn-default" />
@@ -404,11 +394,3 @@
     </div>
 </div>
 
-@*@section scripts
-{
-    <script type="text/javascript">
-        $("#notice_partial").load("_Notifications.cshtml", function () {
-            alert("Load was performed.");
-        });
-    </script>
-}*@

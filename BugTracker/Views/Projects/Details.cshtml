@@ -4,54 +4,34 @@
     UserRolesHelpers urh = new UserRolesHelpers();
     ViewBag.Title = "Details";
 }
-
-<h2>Details</h2>
-
-<div>
-    <h4>Project</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>@Html.DisplayFor(model => model.Name)</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8">
             @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-
-        <dd>
-            @Html.Raw(DisplayHelper.AdjustTime(Model.Created, User.Identity.User().Offset).DateTime)
-        </dd>
-
-        <dt>
-            @Html.Label("Project Manager")
-        </dt>
-
-        <dd>
-            @if (Model.PMId != null)
+        </div>
+        <div class="col-lg-4 text-right">
+            <h4>
+                Project Manager:
+                @if (Model.PMId != null)
             {
-                @Html.Raw(DisplayHelper.User(Model.PMId).DisplayName)
+                    @Html.Raw(" " + DisplayHelper.User(Model.PMId).DisplayName)
+                }
+            </h4>
+            <h6>@Html.Raw("Created: " + DisplayHelper.AdjustTime(Model.Created, User.Identity.User().Offset).DateTime)</h6>
+        </div>
+    </div>
+   <div class="row" style="margin-top:1em;">
+        <div class="col-lg-12">
+            @if (urh.IsUserInRole(User.Identity.User().Id, "Admin") || urh.IsUserInRole(User.Identity.User().Id, "Project Manager"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
             }
-        </dd>
-
-    </dl>
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
 </div>
-<p>
-    @if (urh.IsUserInRole(User.Identity.User().Id, "Admin") || urh.IsUserInRole(User.Identity.User().Id, "Project Manager"))
-    {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
-    }
-    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
-</p>

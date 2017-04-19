@@ -148,46 +148,4 @@ $(document).ready(function () {
         $("#tickets-nav").addClass("selected open");
         $("#tickets-edit").addClass("selected");
     }
-
-
-    $.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
-    $("#my_projects").DataTable({
-        dom: 'Blfrtip',
-        buttons: [
-            'colvis'
-        ],
-        responsive: true
-    });
-    $.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
-    $("#all_projects").DataTable({
-        dom: 'Blfrtip',
-        buttons: [
-            'colvis'
-        ],
-        responsive: true
-    });
-    $.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
-    $("#project_tickets").DataTable({
-        dom: 'Blfrtip',
-        buttons: [
-            'colvis'
-        ],
-        responsive: true
-    });
-    $.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
-    $("#my_tickets").DataTable({
-        dom: 'Blfrtip',
-        buttons: [
-            'colvis'
-        ],
-        responsive: true
-    });
-    $.fn.dataTable.moment('D/M/YYYY h:mm:ss a');
-    $("#sub_tickets").DataTable({
-        dom: 'Blfrtip',
-        buttons: [
-            'colvis'
-        ],
-        responsive: true
-    });
 });

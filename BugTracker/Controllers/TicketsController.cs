@@ -335,7 +335,7 @@ namespace BugTracker.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Description,StatusId,PriorityId,Due,DeveloperId")] Ticket ticket, List<string> Types)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Description,StatusId,PriorityId,Due,DeveloperId")] Ticket ticket, List<int> Types)
         {
             if (ModelState.IsValid)
             {
@@ -474,13 +474,12 @@ namespace BugTracker.Controllers
                     {
                         foreach (var ty in Types)
                         {
-                            var tyInt = Convert.ToInt32(ty);
-                            if (type.Id != tyInt && !Ticket.Type.Contains(db.TicketTypes.Find(tyInt)))
+                            if (type.Id != ty && !Ticket.Type.Contains(db.TicketTypes.Find(ty)))
                             {
-                                addTypes.Add(db.TicketTypes.Find(tyInt).Id);
-                                newTypes.Add(db.TicketTypes.Find(tyInt).Name);
+                                addTypes.Add(db.TicketTypes.Find(ty).Id);
+                                newTypes.Add(db.TicketTypes.Find(ty).Name);
                             }
-                            else if (type.Id != tyInt && !Types.Contains(type.Id.ToString()))
+                            else if (type.Id != ty && !Types.Contains(type.Id))
                             {
                                 oldTypes.Add(db.TicketTypes.Find(type.Id).Name);
                                 removeTypes.Add(db.TicketTypes.Find(type.Id).Id);
@@ -491,6 +490,14 @@ namespace BugTracker.Controllers
                     {
                         oldTypes.Add(db.TicketTypes.Find(type.Id).Name);
                         removeTypes.Add(type.Id);
+                    }
+                }
+                if(Ticket.Type.Count == 0)
+                {
+                    foreach(var ty in Types)
+                    {
+                        addTypes.Add(db.TicketTypes.Find(ty).Id);
+                        newTypes.Add(db.TicketTypes.Find(ty).Name);
                     }
                 }
                 foreach (var ty in removeTypes)

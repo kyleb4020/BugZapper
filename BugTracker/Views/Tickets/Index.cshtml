@@ -84,14 +84,37 @@
                                         @Html.DisplayFor(t => ti.Status.Name)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(t => ti.Priority.Name)
+                                        @if (ti.Priority.Name == "No Priority")
+                                        {
+                                            @Html.DisplayFor(model => ti.Priority.Name)
+                                        }
+                                        else if (ti.Priority.Name == "Low Priority")
+                                        {
+                                            <span class="low-priority">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                        }
+                                        else if (ti.Priority.Name == "Medium Priority")
+                                        {
+                                            <span class="medium-priority">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                        }
+                                        else if (ti.Priority.Name == "High Priority")
+                                        {
+                                            <span class="text-warning">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                        }
+                                        else if (ti.Priority.Name == "Urgent")
+                                        {
+                                            <span class="text-danger">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                        }
+                                        else if (ti.Priority.Name == "Emergency")
+                                        {
+                                            <span class="emergency">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                        }
                                     </td>
                                     <td>
                                         @foreach (var ty in ti.Type)
                                         {
                                             if (ty != ti.Type.Last())
                                             {
-                                                @Html.DisplayFor(t => ty.Name)
+                                                @Html.Raw(ty.Name + ", ")
                                             }
                                             else
                                             {
@@ -100,12 +123,12 @@
                                         }
                                     </td>
                                     <td>
-                                        @Html.Raw(DisplayHelper.AdjustTime(ti.Created,User.Identity.User().Offset).DateTime)
+                                        @Html.Raw(DisplayHelper.AdjustTime(ti.Created, User.Identity.User().Offset).DateTime)
                                     </td>
                                     <td>
-                                        @if(ti.Updated != null)
+                                        @if (ti.Updated != null)
                                         {
-                                        @Html.Raw(DisplayHelper.AdjustTime(ti.Updated.Value,User.Identity.User().Offset).DateTime)
+                                            @Html.Raw(DisplayHelper.AdjustTime(ti.Updated.Value, User.Identity.User().Offset).DateTime)
                                         }
                                     </td>
                                     <td>
@@ -125,20 +148,6 @@
                                         {
                                             @Html.Raw(DisplayHelper.DisplayName(ti.DeveloperId))
                                         }
-                                        @*@foreach (var us in ti.Users)
-                                            {
-                                            if (us.Roles.Any(r => r.RoleName() == "Developer"))
-                                            {
-                                            if (us != ti.Users.Last())
-                                            {
-                                            @Html.Raw(Model.Users.FirstOrDefault(de => de.Id == us.Id).DisplayName + ", ")
-                                            }
-                                            else
-                                            {
-                                            @Html.Raw(Model.Users.FirstOrDefault(de => de.Id == us.Id).DisplayName)
-                                            }
-                                            }
-                                            }*@
                                     </td>
                                 </tr>
                             }

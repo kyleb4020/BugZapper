@@ -35,3 +35,20 @@
 .cage{
     z-index:200;
 }
+.ticket-details-row{
+    border:solid;
+    border-color:#cccccc;
+    border-width: 0px 0px 2px;
+    margin-top:1em;
+    padding-bottom:1em;
+}
+.medium-priority{
+    color:#FFC300;
+}
+.emergency{
+    color:#FF0000;
+    font-weight:800;
+}
+.low-priority{
+    color:#DAF7A6;
+}
