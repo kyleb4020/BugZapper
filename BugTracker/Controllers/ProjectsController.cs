@@ -23,24 +23,14 @@ namespace BugTracker.Controllers
         public ActionResult Index()
         {
             var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            //var projects = ph.ListUserProjects(user.Id);
             var projects = db.Projects.OrderByDescending(p=>p.Name).ToList();
-            //var users = db.Users.ToList();
-            //var PIVM = new ProjectIndexVM();
-            //PIVM.Projects = projects;
-            //PIVM.Users = users;
             return View(projects);
         }
         // GET: Edit Projects
         public ActionResult IndexEdit()
         {
             var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            //var projects = ph.ListUserProjects(user.Id);
             var projects = db.Projects.OrderByDescending(p => p.Name).ToList();
-            //var users = db.Users.ToList();
-            //var PIVM = new ProjectIndexVM();
-            //PIVM.Projects = projects;
-            //PIVM.Users = users;
             return View(projects);
         }
 
@@ -56,10 +46,6 @@ namespace BugTracker.Controllers
             {
                 return HttpNotFound();
             }
-            //var PDVM = new ProjectDetailsVM();
-            //var users = db.Users.ToList();
-            //PDVM.Project = project;
-            //PDVM.Users = users;
             return View(project);
         }
 
@@ -140,33 +126,7 @@ namespace BugTracker.Controllers
             return View(project);
         }
 
-        // GET: Projects/Delete/5
-        //[Authorize(Roles = "Admin, Project Manager")]
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Project project = db.Projects.Find(id);
-        //    if (project == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(project);
-        //}
-
-        // POST: Projects/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[Authorize(Roles = "Admin, Project Manager")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Project project = db.Projects.Find(id);
-        //    db.Projects.Remove(project);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+        
 
         protected override void Dispose(bool disposing)
         {

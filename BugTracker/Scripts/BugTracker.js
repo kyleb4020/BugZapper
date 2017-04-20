@@ -1,7 +1,4 @@
-﻿function reloadNotification() {
-    $("#notice_partial").load("_Notifications.cshtml")
-};
-
+﻿
 function glow() {
     setTimeout(function () {
         if ($('.light').hasClass("dim")) {
@@ -21,10 +18,6 @@ function glow() {
     }, 1000);
 };
 
-$.ajaxSetup({
-    // Disable caching of AJAX responses
-    cache: false
-});
 
 $(document).ready(function () {
     $(".cage").hover(function () {
@@ -37,16 +30,11 @@ $(document).ready(function () {
     });
     glow();
     $("#Projects").multiselect();
-    //$("#UnProjects").multiselect();
     $("#Users").multiselect();
     $("#Roles").multiselect();
-    //$("#UnUsers").multiselect();
-    //$("#UnRoles").multiselect();
     $("#Tickets").multiselect();
     $("#Tickets2").multiselect();
-    //$("#UnTickets").multiselect();
     $("#Developers").multiselect();
-    //$("#UnDevelopers").multiselect();
     $("#Types").multiselect();
     $("#PMId").multiselect();
     $("#StatusId").multiselect();
@@ -68,9 +56,6 @@ $(document).ready(function () {
         });
     });
     
-    //$("#notice_partial").load("/Views/Shared/_Notifications.cshtml", function () {
-    //    alert("Load was performed.");
-    //});
     var num = 0;
     $("#add_attachment").click(function () {
         $("#add_attachment_form").append('<label class="control-label col-md-2">Upload Attachment</label><div class="col-md-10"><input name="upload[' + num + ']" type="file" class="form-control" id="fileUpload" /><p class="text-primary" style="font-weight:bold">Accepted file types: .pdf .doc .docx .zip .txt .rtf .jpg .jpeg .png .gif</p></div><label class="control-label col-md-2">Attachment Description</label><div class="col-md-10"><textarea class="form-control" name="AttachmentDescription"></textarea></div>')

@@ -149,17 +149,6 @@
                                         {
                                             @Html.Raw(DisplayHelper.DisplayName(ti.DeveloperId))
                                         }
-                                        @*if (us.Roles.Any(r => r.RoleName() == "Developer"))
-                                            {
-                                            if (us != ti.Users.Last())
-                                            {
-                                            @Html.Raw(Model.Users.FirstOrDefault(de => de.Id == us.Id).DisplayName + " ")
-                                            }
-                                            else
-                                            {
-                                            @Html.Raw(Model.Users.FirstOrDefault(de => de.Id == us.Id).DisplayName)
-                                            }
-                                            }*@
                                     </td>
                                 </tr>
                             }
@@ -219,7 +208,30 @@
                                     @Html.DisplayFor(t => ti.Status.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(t => ti.Priority.Name)
+                                    @if (ti.Priority.Name == "No Priority")
+                                    {
+                                        @Html.DisplayFor(model => ti.Priority.Name)
+                                    }
+                                    else if (ti.Priority.Name == "Low Priority")
+                                    {
+                                        <span class="low-priority">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                    }
+                                    else if (ti.Priority.Name == "Medium Priority")
+                                    {
+                                        <span class="medium-priority">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                    }
+                                    else if (ti.Priority.Name == "High Priority")
+                                    {
+                                        <span class="text-warning">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                    }
+                                    else if (ti.Priority.Name == "Urgent")
+                                    {
+                                        <span class="text-danger">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                    }
+                                    else if (ti.Priority.Name == "Emergency")
+                                    {
+                                        <span class="emergency">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                    }
                                 </td>
                                 <td>
                                     @foreach (var ty in ti.Type)
@@ -242,61 +254,7 @@
         </div>
     }
 
-    @*@if (User.IsInRole("Submitter"))
-        {
-        <div class="row">
-            <div class="col-lg-12">
-                <table id="sub_tickets" class="table">
-                    <thead>
-                        <tr>
-                            <th colspan="4">
-                                <span style="font-size:1.15em;">My Tickets</span>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                @Html.Label("Title")
-                            </th>
-                            <th>
-                                @Html.Label("Description")
-                            </th>
-                            <th>
-                                @Html.Label("Project Manager")
-                            </th>
-                            <th>
-                                @Html.Label("Status")
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var ti in Model.Tickets)
-                        {
-                        if (ti.OwnerUserId == User.Identity.User().Id)
-                        {
-                        <tr>
-                            <td>
-                                @Html.ActionLink(ti.Title, "Edit", new { id = ti.Id })
-                            </td>
-                            <td>
-                                @Html.DisplayFor(t => ti.Description)
-                            </td>
-                            <td>
-                                @if (ti.PMId != null)
-                                {
-                                @Html.Raw(Model.Users.FirstOrDefault(us => us.Id == ti.PMId).DisplayName)
-                                }
-                            </td>
-                            <td>
-                                @Html.DisplayFor(t => ti.Status.Name)
-                            </td>
-                        </tr>
-                        }
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        }*@
+    
     @if (urh.IsUserInRole(User.Identity.User().Id, "Admin") || urh.IsUserInRole(User.Identity.User().Id, "Project Manager"))
     {
         <div class="row">
@@ -383,74 +341,3 @@
         </div>
     }
 </div>
-
-
-@*<h2>Index</h2>
-
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Priority.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Updated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OwnerUserId)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Priority.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Project.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Updated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OwnerUserId)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-            </td>
-        </tr>
-        }
-
-    </table>*@

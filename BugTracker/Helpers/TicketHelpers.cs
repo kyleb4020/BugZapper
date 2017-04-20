@@ -180,34 +180,5 @@ namespace BugTracker.Helpers
             notice.TicketId = db.Tickets.Find(ticketId).Id;
             return notice;
         }
-
-        //public async Task SendNotification(string devId, int ticketId, string modNote)
-        //{
-        //    //EmailModel model = new EmailModel();
-        //    var dev = db.Users.Find(devId);
-        //    var ticket = db.Tickets.Find(ticketId);
-        //    try
-        //    {
-        //        var body = "<p>Notification that <bold>{0}</bold> has been {1}</p>";
-        //        var from = "BugTracker<contact@BugZap.com>";
-        //        var ticketInfo = ticket.Title;
-        //        //model.Body = "This is a message from your bug tracker site. The name and the email of the contacting person is above.";
-        //        var email = new MailMessage(from,
-        //    ConfigurationManager.AppSettings[dev.Email])
-        //        {
-        //            Subject = "BugTracker Contact Email",
-        //            Body = string.Format(body, ticketInfo, modNote),
-        //            IsBodyHtml = true
-        //        };
-        //        var svc = new PersonalEmail();
-        //        await svc.SendAsync(email);
-        //        //return RedirectToAction("Sent");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        await Task.FromResult(0);
-        //    }
-        //}
     }
 }

@@ -133,41 +133,7 @@
                 </div>
             }
         </div>
-        @*<div class="col-lg-6">
-            @using (Html.BeginForm("UnAssignProjects", "Admin", FormMethod.Post, new { enctype = "Multipart/form-data" }))
-            {
-                @Html.AntiForgeryToken()
-                <div class="form-horizontal">
-                    <hr />
-                    <div class="row">
-                        <div class="col-md-10 col-md-offset-1">
-                            <h4>Directions: Use the two lists below to quickly unassign your users to projects.</h4>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-10 col-md-offset-1">
-                            <div class="form-group">
-                                @Html.Label("Select the User(s)", htmlAttributes: new { @class = "col-md-12" })
-                                @Html.ListBox("UnUsers", null)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-10 col-md-offset-1">
-                            <div class="form-group">
-                                @Html.Label("Select the Project(s)", htmlAttributes: new { @class = "col-md-12" })
-                                @Html.ListBox("UnProjects", null)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-10 text-center">
-                            <input type="submit" value="UnAssign from Project" class="btn btn-primary" />
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>*@
+        
     </div>
 </div>
 

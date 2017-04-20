@@ -210,7 +210,30 @@
                                     @Html.DisplayFor(t => ti.Status.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(t => ti.Priority.Name)
+                                    @if (ti.Priority.Name == "No Priority")
+                                    {
+                                        @Html.DisplayFor(model => ti.Priority.Name)
+                                    }
+                                    else if (ti.Priority.Name == "Low Priority")
+                                    {
+                                        <span class="low-priority">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                    }
+                                    else if (ti.Priority.Name == "Medium Priority")
+                                    {
+                                        <span class="medium-priority">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                    }
+                                    else if (ti.Priority.Name == "High Priority")
+                                    {
+                                        <span class="text-warning">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                    }
+                                    else if (ti.Priority.Name == "Urgent")
+                                    {
+                                        <span class="text-danger">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                    }
+                                    else if (ti.Priority.Name == "Emergency")
+                                    {
+                                        <span class="emergency">@Html.DisplayFor(model => ti.Priority.Name)</span>
+                                    }
                                 </td>
                                 <td>
                                     @foreach (var ty in ti.Type)
@@ -287,161 +310,5 @@
                 </table>
             </div>
         </div>
-    }
-    @*@if (User.IsInRole("Project Manager") || User.IsInRole("Admin"))
-        {
-            <div class="row">
-                <div class="col-lg-12">
-                    <h3 class="danger">@ViewBag.ErrorMessage</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    @using (Html.BeginForm("AssignTickets", "Tickets", FormMethod.Post, new { enctype = "Multipart/form-data" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="form-horizontal">
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <h4>Directions: Use the two lists below to quickly assign your Developers to Tickets. </h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <div class="form-group">
-                                        @Html.Label("Select the Developer", htmlAttributes: new { @class = "col-md-12" })
-                                        @Html.DropDownList("Developers", null, htmlAttributes: new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <div class="form-group">
-                                        @Html.Label("Select the Ticket(s)", htmlAttributes: new { @class = "col-md-12" })
-                                        @Html.ListBox("Tickets", null)
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-10 text-center">
-                                    <input type="submit" name="Selection" value="Assign to Ticket" class="btn btn-primary" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-10 text-center">
-                                    <input type="submit" name="Selection" value="Unassign from Ticket" class="btn btn-primary" />
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-                <div class="col-lg-6">
-                    @using (Html.BeginForm("UnAssignTickets", "Tickets", FormMethod.Post, new { enctype = "Multipart/form-data" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="form-horizontal">
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <h4>Directions: Use the two lists below to quickly unassign your Developers from Tickets.</h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <div class="form-group">
-                                        @Html.Label("Select the Developer", htmlAttributes: new { @class = "col-md-12" })
-                                        @Html.DropDownList("UnDevelopers", null, htmlAttributes: new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <div class="form-group">
-                                        @Html.Label("Select the Ticket(s)", htmlAttributes: new { @class = "col-md-12" })
-                                        @Html.ListBox("UnTickets", null)
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-10 text-center">
-                                    <input type="submit" value="UnAssign from Ticket" class="btn btn-primary" />
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
-        }*@
+    }    
 </div>
-
-
-@*<h2>Index</h2>
-
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Priority.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Updated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OwnerUserId)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Priority.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Project.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Updated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OwnerUserId)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-            </td>
-        </tr>
-        }
-
-    </table>*@

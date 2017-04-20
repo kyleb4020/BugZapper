@@ -11,13 +11,7 @@
             if (notice.Create.DateTime.AddDays(7) >= DateTime.Today || !notice.Viewed)
             {
                 <li class="message-preview">
-                    @using (Ajax.BeginForm("Viewed", "Notifications", FormMethod.Post, new AjaxOptions
-                    {
-                        AllowCache = false,
-                        InsertionMode = InsertionMode.Replace,
-                        HttpMethod = "POST",
-                        OnSuccess = "reloadNotification"
-                    }, new { id = "view_notice" + @i.ToString() }))
+                    @using (Html.BeginForm("Viewed", "Notifications", FormMethod.Post, new { id = "view_notice" + @i.ToString() }))
                     {
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="NoticeId" value="@notice.Id" />
@@ -45,15 +39,6 @@
             }
         }
 
-
-        @*<li class="message-preview">
-                <a href = "#" >
-                    <span class="avatar"><i class="fa fa-bell"></i></span>
-                    <span class="message">Security alert</span>
-                </a>
-            </li>
-            <li class="divider"></li>
-            <li><a href = "#" > Go to Inbox<span class="badge">2</span></a></li>*@
     </ul>
 </li>
 

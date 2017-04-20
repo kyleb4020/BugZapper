@@ -20,8 +20,6 @@ namespace BugTracker.Controllers
 
         public ActionResult OldIndex2()
         {
-            //ViewBag.ReturnUrl = "/Home/Dashboard";
-            //return View();
             return RedirectToAction("Index");
         }
 

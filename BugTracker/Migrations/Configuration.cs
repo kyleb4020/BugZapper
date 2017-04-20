@@ -187,16 +187,7 @@ namespace BugTracker.Migrations
             , new Project { Name = "Demo3", Description = "This is the third demo Project", Created = DateTimeOffset.Now }
             , new Project { Name = "Demo4", Description = "This is the fourth demo Project", Created = DateTimeOffset.Now });
 
-            //if (!context.Projects.Any(p=>p.Users.Any(u=>u.Roles.Any(r=>r.RoleId == context.Roles.FirstOrDefault(t=>t.Name == "Admin").Id))))
-            //{
-            //    var adminId = userManager.FindByEmail("kyle.r.bartholomew@gmail.com").Id;
-            //    context.Projects.FirstOrDefault(p => p.Name == "Unassigned").Users.Add(context.Users.Find(adminId));
-            //}
-
-            //Set up Demo Developer as a Developer
-            //var devId = userManager.FindByEmail("demodev@demo.com").Id;
-            //context.Developers.AddOrUpdate(d => d.UserId, new Developer { UserId = devId });
-
+            
             //Set up Statuses
             context.TicketStatus.AddOrUpdate(ts => ts.Name, new TicketStatus { Name = "Unassigned" },
                 new TicketStatus { Name = "Assigned" }, new TicketStatus { Name = "In Progress" }, 

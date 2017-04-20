@@ -12,8 +12,6 @@ namespace BugTracker.Helpers
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
 
-        //I made this so I could add DisplayName as a method onto an IIdentity.
-        //This is useful for me because it displays their DisplayName in the _LoginPartial
         public static string DisplayName(this IIdentity user)
         {
             var disName = db.Users.FirstOrDefault(u => u.UserName == user.Name);
@@ -91,28 +89,6 @@ namespace BugTracker.Helpers
                 return null;
             }
         }
-
-        //public static ICollection<Notification> Notifications(this IIdentity user)
-        //{
-        //    var User = db.Users.FirstOrDefault(u => u.UserName == user.Name);
-        //    var notices = new List<Notification>();
-
-        //    if (User.Notifications != null)
-        //    {
-        //        foreach (var note in User.Notifications)
-        //        {
-        //            notices.Add(note);
-        //        }
-        //    }
-        //    if (notices != null)
-        //    {
-        //        return notices;
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
 
         public static ICollection<Project> UserProjects (this IdentityUserRole user)
         {

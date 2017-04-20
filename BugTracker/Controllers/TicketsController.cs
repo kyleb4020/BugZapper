@@ -38,9 +38,7 @@ namespace BugTracker.Controllers
                 _userManager = value;
             }
         }
-        //private UserManager<ApplicationUser> UserManager = new UserManager<ApplicationUser>
-        //            (new UserStore<ApplicationUser>(new ApplicationDbContext()));
-
+        
         // GET: Tickets
         public ActionResult Index()
         {
@@ -76,27 +74,8 @@ namespace BugTracker.Controllers
             {
                 projects = db.Projects.ToList();
             }
-            //Use users to help display the right stuff. This is to make sense of the PMId, DeveloperIds, and OwnerId
-            //var users = new List<ApplicationUser>();
-            //var users = db.Users.ToList();
-            //foreach(var us in allUsers)
-            //{
-            //    //Pulls out all of the users attached to the list of projects
-            //    if (projects.All(p => p.Tickets.All(t => t.Users.Contains(us))))
-            //    {
-            //        users.Add(us);
-            //    }
-            //}
-            //var DevList = uh.ListDevsOnMyProjects(userId);
-            //var myTickets = th.ListUserTicketsInProjects(userId);
             ticketVM.Tickets = tickets.OrderByDescending(t => t.Created).ToList();
             ticketVM.Project = projects.OrderByDescending(p => p.Name).ToList();
-            //ticketVM.Users = users;
-            //ViewBag.Developers = new SelectList(DevList, "Id", "DisplayName");
-            //ViewBag.Tickets = new MultiSelectList(myTickets, "Id", "Title");
-            //ViewBag.UnDevelopers = new SelectList(DevList, "Id", "DisplayName");
-            //ViewBag.UnTickets = new MultiSelectList(myTickets, "Id", "Title");
-            //ViewBag.AssignedTickets = th.ListUserAssignedTickets(userId).ToList();
             return View(ticketVM);
         }
         [Authorize(Roles = "Admin, Project Manager, Developer")]
@@ -135,30 +114,14 @@ namespace BugTracker.Controllers
             {
                 projects = db.Projects.OrderByDescending(p => p.Name).ToList();
             }
-            //Use users to help display the right stuff. This is to make sense of the PMId, DeveloperIds, and OwnerId
-            //var users = new List<ApplicationUser>();
-            //var users = db.Users.ToList();
-            //foreach(var us in allUsers)
-            //{
-            //    //Pulls out all of the users attached to the list of projects
-            //    if (projects.All(p => p.Tickets.All(t => t.Users.Contains(us))))
-            //    {
-            //        users.Add(us);
-            //    }
-            //}
-            //var userList = uh.ListUsersOnMyProjects(userId);
             var myTickets = th.ListUserTicketsInProjects(userId).OrderByDescending(t => t.Created).ToList();
             ticketVM.Tickets = tickets.OrderByDescending(t => t.Created).ToList();
             ticketVM.Project = projects.OrderByDescending(p => p.Name).ToList();
-            //ticketVM.Users = users;
             var DevList = uh.ListDevsOnMyProjects(userId).OrderByDescending(d => d.DisplayName).ToList();
             ViewBag.Developers = new SelectList(DevList, "Id", "DisplayName");
             ViewBag.Tickets = new MultiSelectList(myTickets, "Id", "Title");
             ViewBag.Tickets2 = new MultiSelectList(myTickets, "Id", "Title");
             ViewBag.Projects = new SelectList(projects, "Id", "Name");
-            //ViewBag.UnProjects = new SelectList(projects, "Id", "Name");
-            //ViewBag.UnTickets = new MultiSelectList(myTickets, "Id", "Title");
-            //ViewBag.AssignedTickets = th.ListUserAssignedTickets(userId).ToList();
             return View(ticketVM);
         }
 
@@ -175,29 +138,16 @@ namespace BugTracker.Controllers
                 return HttpNotFound();
             }
             var userId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id;
-            //if (uh.IsUserInRole(userId, "Admin") ||
-            //    (uh.IsUserInRole(userId, "Project Manager") && userId == ticket.PMId) ||
-            //    (uh.IsUserInRole(userId, "Developer") && userId == ticket.DeveloperId) ||
-            //    (uh.IsUserInRole(userId, "Submitter") && userId == ticket.OwnerUserId))
-            //{
-            //var users = db.Users.ToList();
             TicketDetailsVM TicketVM = new TicketDetailsVM();
             TicketVM.Ticket = ticket;
-            //TicketVM.Users = users;
             ViewBag.Error = "";
             return View(TicketVM);
-            //}
-            //return View("Error");
         }
 
         // GET: Tickets/Create
         [Authorize(Roles = "Submitter, Admin")]
         public ActionResult Create()
         {
-            //ViewBag.PriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
-            //ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
-            //ViewBag.TypeId = new SelectList(db.TicketTypes, "Id", "Name");
-            //ViewBag.StatusId = new SelectList(db.TicketStatus, "Id", "Name");
             return View();
         }
 
@@ -213,7 +163,6 @@ namespace BugTracker.Controllers
             {
                 var user = db.Users.Find(User.Identity.GetUserId());
                 ticket.OwnerUserId = user.Id;
-                //ticket.Users.Add(db.Users.FirstOrDefault(p => p.Roles.Any(r => r.RoleId == db.Roles.FirstOrDefault(role => role.Name == "Admin").Id))); //Add the Admin to the ticket as a User
                 ticket.Project = db.Projects.FirstOrDefault(p => p.Name == "Unassigned");
                 //Add the Project Manager of the Project to the ticket
                 foreach (var us in ticket.Project.Users)
@@ -226,13 +175,6 @@ namespace BugTracker.Controllers
                 ticket.Created = DateTimeOffset.Now;
                 ticket.Priority = db.TicketPriorities.FirstOrDefault(p => p.Name == "No Priority");
                 ticket.Status = db.TicketStatus.FirstOrDefault(p => p.Name == "Unassigned");
-                //This creates a new list of Ticket Types and then populates it with a single Type object "Default"
-                //var TypeList = new List<TicketType>();
-                //int TypeNum = db.TicketTypes.FirstOrDefault(p => p.Name == "Default").Id;
-                //var DefaultType = db.TicketTypes.Find(TypeNum);
-                //TypeList.Add(DefaultType);
-                //ticket.Type = TypeList;
-                //Below does the same thing as above
                 ticket.Type.Add(db.TicketTypes.FirstOrDefault(p => p.Name == "Default"));
 
 
@@ -267,38 +209,11 @@ namespace BugTracker.Controllers
                     }
                 }
                 db.SaveChanges();
-                //if(Submit == "Add Attachment")
-                //{
-                //    return RedirectToAction("CreateAttachment", new { id = db.Tickets.Find(ticket.Id).Id });
-                //}
-                //else if(Submit == "Create")
-                //{
                 return RedirectToAction("Index", "Tickets");
-                //}
             }
-            //ViewBag.PriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.PriorityId);
-            //ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
-            //ViewBag.StatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.StatusId);
             return View(ticket);
         }
-
-        // GET: CreateAttachment
-        //public ActionResult CreateAttachment(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Ticket ticket = db.Tickets.Find(id);
-        //    if (ticket == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    var CTVM = new CreateTicketVM();
-        //    CTVM.Ticket = ticket;
-        //    //CTVM.Attachments = new Attachments();
-        //    return View(CTVM);
-        //}
+        
 
         [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
         // GET: Tickets/Edit/5
@@ -324,7 +239,6 @@ namespace BugTracker.Controllers
             ViewBag.DeveloperId = new SelectList(DevList, "Id", "DisplayName", ticket.DeveloperId);
             ViewBag.Types = new MultiSelectList(db.TicketTypes.OrderByDescending(tt => tt.Name).ToList(), "Id", "Name", selectedTicketTypes);
             ViewBag.PriorityId = new SelectList(db.TicketPriorities.OrderByDescending(tp => tp.Name).ToList(), "Id", "Name", ticket.PriorityId);
-            //ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
             ViewBag.StatusId = new SelectList(db.TicketStatus.OrderByDescending(ts => ts.Name).ToList(), "Id", "Name", ticket.StatusId);
             return View(ticket);
         }
@@ -345,13 +259,10 @@ namespace BugTracker.Controllers
                 //Update Ticket Histories
                 foreach (var prop in typeof(Ticket).GetProperties())
                 {
-                    //                    if (!(prop.Name == "Updated" || prop.Name == "Due" || prop.Name == "OwnerUserId" || prop.Name == "PMId" || prop.Name == "DeveloperId" || prop.Name == "Project" || prop.Name == "Comments" || prop.Name == "Attachments" || prop.Name == "Histories" || prop.Name == "Type" || prop.Name == "Notifications"))
                     if (prop.Name == "Title" || prop.Name == "Description" || (prop.Name == "StatusId" && prop.GetValue(ticket).ToString() != "0") || (prop.Name == "PriorityId" && prop.GetValue(ticket).ToString() != "0"))
                     {
                         if (prop.GetValue(ticket).ToString() != prop.GetValue(Ticket).ToString())
                         {
-                            //if (prop.Name == "Title" || prop.Name == "Description" || (prop.Name == "StatusId" && prop.GetValue(ticket).ToString() != "0") || (prop.Name == "PriorityId" && prop.GetValue(ticket).ToString() != "0"))
-                            //{
                             var oldVal = prop.GetValue(Ticket).ToString();
                             var newVal = prop.GetValue(ticket).ToString();
                             if (prop.Name == "StatusId")
@@ -364,46 +275,17 @@ namespace BugTracker.Controllers
                                 oldVal = db.TicketPriorities.Find(prop.GetValue(Ticket)).Name;
                                 newVal = db.TicketPriorities.Find(prop.GetValue(ticket)).Name;
                             }
-
                             var history = th.CreateTicketHistory(UserId, Ticket.Id, prop.Name, oldVal, newVal);
                             db.Histories.Add(history);
                             db.Tickets.Find(Ticket.Id).Histories.Add(history);
                             prop.SetValue(Ticket, prop.GetValue(ticket));
-                            //}
-                            //else if (prop.Name == "DeveloperId")
-                            //{
-                            //    if (prop.GetValue(Ticket).ToString() != null && prop.GetValue(ticket).ToString() != null)
-                            //    {
-                            //        var oldDev = db.Users.Find(Ticket.DeveloperId);
-                            //        var newDev = db.Users.Find(ticket.DeveloperId);
-                            //        var history = th.CreateTicketHistory(UserId, Ticket.Id, prop.Name, oldDev.DisplayName, newDev.DisplayName);
-                            //        db.Histories.Add(history);
-                            //        db.Tickets.Find(Ticket.Id).Histories.Add(history);
-                            //        oldDev.Tickets.Remove(Ticket);
-                            //        newDev.Tickets.Add(Ticket);
-                            //        Ticket.DeveloperId = newDev.Id;
-                            //    }
-                            //    else if (prop.GetValue(Ticket).ToString() == null && prop.GetValue(ticket).ToString() != null)
-                            //    {
-                            //        var newDev = db.Users.Find(ticket.DeveloperId);
-                            //        var history = th.CreateTicketHistory(UserId, Ticket.Id, prop.Name, "", newDev.DisplayName);
-                            //        db.Histories.Add(history);
-                            //        db.Tickets.Find(Ticket.Id).Histories.Add(history);
-                            //        newDev.Tickets.Add(Ticket);
-                            //        Ticket.DeveloperId = newDev.Id;
-                            //    }
-                            //}
+                           
                         }
                     }
-                    //Console.WriteLine(string.Format("Property Name: {0}, Property Value: {1}", prop.Name, prop.GetValue(myClass)));
                 }
-                //Ticket.Title = ticket.Title;
-                //Ticket.Description = ticket.Description;
+               
                 Ticket.Updated = DateTimeOffset.Now;
-                //if(ticket.StatusId != 0)
-                //{
-                //Ticket.StatusId = ticket.StatusId;
-                //}                
+                               
                 if (Ticket.DeveloperId != ticket.DeveloperId)
                 {
                     if (Ticket.DeveloperId != null && ticket.DeveloperId != null)
@@ -438,22 +320,9 @@ namespace BugTracker.Controllers
                         db.Tickets.Find(Ticket.Id).Notifications.Add(newDevNotice);
                         db.Users.Find(newDev.Id).Notifications.Add(newDevNotice);
                     }
-                    //This will cause problems because Developers cannot submit a DeveloperId from Edit.
-                    //else if (Ticket.DeveloperId != null && ticket.DeveloperId == null)
-                    //{
-                    //    var oldDev = db.Users.Find(Ticket.DeveloperId);
-                    //    oldDev.Tickets.Remove(Ticket);
-                    //    Ticket.DeveloperId = null;
-                    //}
+                    
                 }
-                //if (ticket.PriorityId != 0)
-                //{
-                //    Ticket.PriorityId = ticket.PriorityId;
-                //}
-                //if (ticket.Due != null)
-                //{
-                //    Ticket.Due = ticket.Due;
-                //}
+                
                 if (ticket.Due != null)
                 {
                     Ticket.Due = ticket.Due.Value.UtcDateTime;
@@ -476,13 +345,19 @@ namespace BugTracker.Controllers
                         {
                             if (type.Id != ty && !Ticket.Type.Contains(db.TicketTypes.Find(ty)))
                             {
-                                addTypes.Add(db.TicketTypes.Find(ty).Id);
-                                newTypes.Add(db.TicketTypes.Find(ty).Name);
+                                if (!addTypes.Contains(ty))
+                                {
+                                    addTypes.Add(db.TicketTypes.Find(ty).Id);
+                                    newTypes.Add(db.TicketTypes.Find(ty).Name);
+                                }                                
                             }
-                            else if (type.Id != ty && !Types.Contains(type.Id))
+                            if (type.Id != ty && !Types.Contains(type.Id))
                             {
-                                oldTypes.Add(db.TicketTypes.Find(type.Id).Name);
-                                removeTypes.Add(db.TicketTypes.Find(type.Id).Id);
+                                if (!removeTypes.Contains(type.Id))
+                                {
+                                    oldTypes.Add(db.TicketTypes.Find(type.Id).Name);
+                                    removeTypes.Add(db.TicketTypes.Find(type.Id).Id);
+                                }                                
                             }
                         }
                     }
@@ -538,16 +413,6 @@ namespace BugTracker.Controllers
                     db.Histories.Add(history);
                     db.Tickets.Find(Ticket.Id).Histories.Add(history);
                 }
-                //Ticket.Type.Clear();
-                //foreach (var ty in Types)
-                //{
-                //    var tyInt = Convert.ToInt32(ty);
-                //    if (!Ticket.Type.Contains(db.TicketTypes.Find(tyInt)))
-                //    {
-                //        Ticket.Type.Add(db.TicketTypes.Find(tyInt));
-                //    }
-                //}
-                //}
                 if (UserId != Ticket.DeveloperId && Ticket.DeveloperId != null)
                 {
                     await UserManager.SendEmailAsync(Ticket.DeveloperId, "Ticket Change", "A ticket assigned to you titled: " + Ticket.Title + " has recently been changed/updated. Please <a href=\"kbartholomew-bugtracker.azurewebsites.net\">log in</a> to your account to view the details.");
@@ -570,7 +435,6 @@ namespace BugTracker.Controllers
             ViewBag.Developers = new SelectList(DevList, "Id", "Name", ticket.DeveloperId);
             ViewBag.Types = new MultiSelectList(db.TicketTypes.OrderByDescending(tt => tt.Name).ToList(), "Id", "Name", Types);
             ViewBag.PriorityId = new SelectList(db.TicketPriorities.OrderByDescending(tp => tp.Name).ToList(), "Id", "Name", ticket.PriorityId);
-            //ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
             ViewBag.StatusId = new SelectList(db.TicketStatus.OrderByDescending(ts => ts.Name).ToList(), "Id", "Name", ticket.StatusId);
             return View(ticket);
         }
@@ -700,28 +564,14 @@ namespace BugTracker.Controllers
                     {
                         eprojects = ph.ListUserProjects(euserId).ToList();
                     }
-                    //Use users to help display the right stuff. This is to make sense of the PMId, DeveloperIds, and OwnerId
-                    //var eusers = new List<ApplicationUser>();
-                    //var eallUsers = db.Users.ToList();
-                    //foreach (var us in eallUsers)
-                    //{
-                    //    //Pulls out all of the users attached to the list of projects
-                    //    if (eprojects.All(p => p.Tickets.All(t => t.Users.Contains(us))))
-                    //    {
-                    //        eusers.Add(us);
-                    //    }
-                    //}
                     var eDevList = uh.ListDevsOnMyProjects(euserId).OrderByDescending(d => d.DisplayName).ToList();
                     var emyTickets = th.ListUserTicketsInProjects(euserId);
                     eticketVM.Tickets = etickets.OrderByDescending(t => t.Created).ToList();
                     eticketVM.Project = eprojects.OrderByDescending(p => p.Name).ToList();
-                    //eticketVM.Users = eusers;
                     ViewBag.Developers = new MultiSelectList(eDevList, "Id", "DisplayName", Developers);
                     ViewBag.Tickets = new MultiSelectList(emyTickets, "Id", "Title", Tickets);
                     ViewBag.Tickets2 = new MultiSelectList(emyTickets, "Id", "Title");
                     ViewBag.Projects = new SelectList(eprojects, "Id", "Name");
-                    //ViewBag.UnDevelopers = new MultiSelectList(DevList, "Id", "DisplayName");
-                    //ViewBag.UnTickets = new MultiSelectList(myTickets, "Id", "Title");
                     ViewBag.ErrorMessage = "Something went wrong. Please try again";
 
                     return View("Index", eticketVM);
@@ -754,111 +604,19 @@ namespace BugTracker.Controllers
             else if (User.IsInRole("Project Manager") || User.IsInRole("Developer"))
             {
                 projects = ph.ListUserProjects(userId).ToList();
-            }
-            //Use users to help display the right stuff. This is to make sense of the PMId, DeveloperIds, and OwnerId
-            //var users = new List<ApplicationUser>();
-            //var allUsers = db.Users.ToList();
-            //foreach (var us in allUsers)
-            //{
-            //    //Pulls out all of the users attached to the list of projects
-            //    if (projects.All(p => p.Tickets.All(t => t.Users.Contains(us))))
-            //    {
-            //        users.Add(us);
-            //    }
-            //}
+            }            
             var DevList = uh.ListDevsOnMyProjects(userId).OrderByDescending(d => d.DisplayName).ToList();
             var myTickets = th.ListUserTicketsInProjects(userId).OrderByDescending(t => t.Created).ToList();
             ticketVM.Tickets = tickets.OrderByDescending(t => t.Created).ToList();
             ticketVM.Project = projects.OrderByDescending(p => p.Name).ToList();
-            //ticketVM.Users = users;
             ViewBag.Developers = new MultiSelectList(DevList, "Id", "DisplayName", Developers);
             ViewBag.Tickets = new MultiSelectList(myTickets, "Id", "Title", Tickets);
             ViewBag.Tickets2 = new MultiSelectList(myTickets, "Id", "Title");
             ViewBag.Projects = new SelectList(projects, "Id", "Name");
-            //ViewBag.UnDevelopers = new MultiSelectList(DevList, "Id", "DisplayName");
-            //ViewBag.UnTickets = new MultiSelectList(myTickets, "Id", "Title");
             ViewBag.ErrorMessage = "Something went wrong. Please try again";
 
             return View("EditIndex", ticketVM);
         }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult UnAssignTickets(string UnDevelopers, List<string> UnTickets)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = db.Users.Find(UnDevelopers);
-        //        Ticket ticket = new Ticket();
-        //        if (UnTickets != null)
-        //        {
-        //            foreach (var id in UnTickets)
-        //            {
-        //                int intId = Convert.ToInt32(id);
-        //                ticket = db.Tickets.Find(intId);
-        //                if (th.IsUserOnTicket(user.Id, ticket.Id))
-        //                {
-        //                    user.Tickets.Remove(ticket);
-        //                    ticket.DeveloperId = null;
-        //                }
-        //            }
-        //        }
-        //        db.Entry(user).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index", "Tickets");
-        //    }
-        //    var userId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id;
-        //    var ticketVM = new TicketIndexVM();
-        //    //User tickets for developers assigned tickets and submitters owned tickets
-        //    var tickets = new List<Ticket>();
-        //    if (User.IsInRole("Developer"))
-        //    {
-        //        foreach (var ti in th.ListUserAssignedTickets(userId))
-        //        {
-        //            tickets.Add(ti);
-        //        }
-        //    }
-        //    if (User.IsInRole("Submitter"))
-        //    {
-        //        foreach (var ti in th.ListUserTickets(userId))
-        //        {
-        //            tickets.Add(ti);
-        //        }
-        //    }
-        //    //Use projects for the list of tickets in projects assigned
-        //    var projects = new List<Project>();
-        //    if (User.IsInRole("Admin") || User.IsInRole("Submitter"))
-        //    {
-        //        projects = db.Projects.ToList();
-        //    }
-        //    else if (User.IsInRole("Project Manager") || User.IsInRole("Developer"))
-        //    {
-        //        projects = ph.ListUserProjects(userId).ToList();
-        //    }
-        //    //Use users to help display the right stuff. This is to make sense of the PMId, DeveloperIds, and OwnerId
-        //    var users = new List<ApplicationUser>();
-        //    var allUsers = db.Users.ToList();
-        //    foreach (var us in allUsers)
-        //    {
-        //        //Pulls out all of the users attached to the list of projects
-        //        if (projects.All(p => p.Tickets.All(t => t.Users.Contains(us))))
-        //        {
-        //            users.Add(us);
-        //        }
-        //    }
-        //    var DevList = uh.ListDevsOnMyProjects(userId);
-        //    var myTickets = th.ListUserTicketsInProjects(userId);
-        //    ticketVM.Tickets = tickets;
-        //    ticketVM.Project = projects;
-        //    ticketVM.Users = users;
-        //    ViewBag.Developers = new MultiSelectList(DevList, "Id", "DisplayName");
-        //    ViewBag.Tickets = new MultiSelectList(myTickets, "Id", "Title");
-        //    ViewBag.UnDevelopers = new MultiSelectList(DevList, "Id", "DisplayName", UnDevelopers);
-        //    ViewBag.UnTickets = new MultiSelectList(myTickets, "Id", "Title", UnTickets);
-        //    ViewBag.ErrorMessage = "Something went wrong. Please try again";
-
-        //    return View("Index", ticketVM);
-        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -900,7 +658,6 @@ namespace BugTracker.Controllers
                                 newPM = db.Users.Find(project.PMId).DisplayName;
                                 test2 = true;
                             }
-                            //ticket.Developers.Add();
                         }
                         if (test1)
                         {
@@ -916,7 +673,6 @@ namespace BugTracker.Controllers
                         }
                     }
                 }
-                //db.Entry(ticket).State = EntityState.Modified;
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("EditIndex", "Tickets");
@@ -948,141 +704,19 @@ namespace BugTracker.Controllers
             else if (User.IsInRole("Project Manager") || User.IsInRole("Developer"))
             {
                 projects = ph.ListUserProjects(userId).ToList();
-            }
-            //Use users to help display the right stuff. This is to make sense of the PMId, DeveloperIds, and OwnerId
-            //var users = new List<ApplicationUser>();
-            //var allUsers = db.Users.ToList();
-            //foreach (var us in allUsers)
-            //{
-            //    //Pulls out all of the users attached to the list of projects
-            //    if (projects.All(p => p.Tickets.All(t => t.Users.Contains(us))))
-            //    {
-            //        users.Add(us);
-            //    }
-            //}
+            }            
             var DevList = uh.ListDevsOnMyProjects(userId).OrderByDescending(d => d.DisplayName).ToList();
             var myTickets = th.ListUserTicketsInProjects(userId).OrderByDescending(t => t.Created).ToList();
             ticketVM.Tickets = tickets.OrderByDescending(t => t.Created).ToList();
             ticketVM.Project = projects.OrderByDescending(p => p.Name).ToList();
-            //ticketVM.Users = users;
             ViewBag.Developers = new MultiSelectList(DevList, "Id", "DisplayName");
             ViewBag.Tickets = new MultiSelectList(myTickets, "Id", "Title");
             ViewBag.Tickets2 = new MultiSelectList(myTickets, "Id", "Title", Tickets2);
             ViewBag.Projects = new SelectList(projects, "Id", "Name", Projects);
-            //ViewBag.UnDevelopers = new MultiSelectList(DevList, "Id", "DisplayName");
-            //ViewBag.UnTickets = new MultiSelectList(myTickets, "Id", "Title");
             ViewBag.ErrorMessage = "Something went wrong. Please try again";
 
             return View("EditIndex", ticketVM);
-        }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult UnAssignFromProjects(List<string> UnTickets, string UnProjects)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        int projectId = Convert.ToInt32(UnProjects);
-        //        var project = db.Projects.Find(projectId);
-        //        Ticket ticket = new Ticket();
-        //        if (UnTickets != null)
-        //        {
-        //            foreach (var id in UnTickets)
-        //            {
-        //                int intId = Convert.ToInt32(id);
-        //                ticket = db.Tickets.Find(intId);
-        //                if (th.IsTicketOnProject(ticket.Id, project.Id))
-        //                {
-        //                    //All tickets are on at least one project so if you unassign them, they go back to Unassigned
-        //                    project.Tickets.Remove(ticket);
-        //                    ticket.Project = db.Projects.FirstOrDefault(p => p.Name == "Unassigned");
-        //                    //ticket.DeveloperIds.Remove(user.Id);
-        //                }
-        //            }
-        //        }
-        //        db.Entry(ticket).State = EntityState.Modified;
-        //        db.Entry(project).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("EditIndex", "Tickets");
-        //    }
-        //    var userId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id;
-        //    var ticketVM = new TicketIndexVM();
-        //    //User tickets for developers assigned tickets and submitters owned tickets
-        //    var tickets = new List<Ticket>();
-        //    if (User.IsInRole("Developer"))
-        //    {
-        //        foreach (var ti in th.ListUserAssignedTickets(userId))
-        //        {
-        //            tickets.Add(ti);
-        //        }
-        //    }
-        //    if (User.IsInRole("Submitter"))
-        //    {
-        //        foreach (var ti in th.ListUserTickets(userId))
-        //        {
-        //            tickets.Add(ti);
-        //        }
-        //    }
-        //    //Use projects for the list of tickets in projects assigned
-        //    var projects = new List<Project>();
-        //    if (User.IsInRole("Admin") || User.IsInRole("Submitter"))
-        //    {
-        //        projects = db.Projects.ToList();
-        //    }
-        //    else if (User.IsInRole("Project Manager") || User.IsInRole("Developer"))
-        //    {
-        //        projects = ph.ListUserProjects(userId).ToList();
-        //    }
-        //    //Use users to help display the right stuff. This is to make sense of the PMId, DeveloperIds, and OwnerId
-        //    var users = new List<ApplicationUser>();
-        //    var allUsers = db.Users.ToList();
-        //    foreach (var us in allUsers)
-        //    {
-        //        //Pulls out all of the users attached to the list of projects
-        //        if (projects.All(p => p.Tickets.All(t => t.Users.Contains(us))))
-        //        {
-        //            users.Add(us);
-        //        }
-        //    }
-        //    var userList = uh.ListUsersOnMyProjects(userId);
-        //    var myTickets = th.ListUserTicketsInProjects(userId);
-        //    ticketVM.Tickets = tickets;
-        //    ticketVM.Project = projects;
-        //    ticketVM.Users = users;
-        //    ViewBag.Projects = new SelectList(projects, "Id", "Name");
-        //    ViewBag.Tickets = new MultiSelectList(myTickets, "Id", "Title");
-        //    ViewBag.UnProjects = new SelectList(projects, "Id", "Name", UnProjects);
-        //    ViewBag.UnTickets = new MultiSelectList(myTickets, "Id", "Title", UnTickets);
-        //    ViewBag.ErrorMessage = "Something went wrong. Please try again";
-
-        //    return View("EditIndex", ticketVM);
-        //}
-
-        // GET: Tickets/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Ticket ticket = db.Tickets.Find(id);
-        //    if (ticket == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(ticket);
-        //}
-
-        // POST: Tickets/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Ticket ticket = db.Tickets.Find(id);
-        //    db.Tickets.Remove(ticket);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+        }       
 
         protected override void Dispose(bool disposing)
         {

@@ -35,35 +35,7 @@ namespace BugTracker.Controllers
             }
         }
 
-        // GET: Attachments
-        //public ActionResult Index()
-        //{
-        //    var attachments = db.Attachments.Include(a => a.Ticket).Include(a => a.User);
-        //    return View(attachments.ToList());
-        //}
-
-        // GET: Attachments/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Attachments attachments = db.Attachments.Find(id);
-        //    if (attachments == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(attachments);
-        //}
-
-        // GET: Attachments/Create
-        //public ActionResult Create()
-        //{
-        //    ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title");
-        //    ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
-        //    return View();
-        //}
+        
 
         // POST: Attachments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -109,71 +81,10 @@ namespace BugTracker.Controllers
                 }
             }
 
-            //ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", attachments.TicketId);
-            //ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", attachments.UserId);
             return View("CreateAttachment","Tickets", attachments);
         }
 
-        // GET: Attachments/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Attachments attachments = db.Attachments.Find(id);
-        //    if (attachments == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", attachments.TicketId);
-        //    ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", attachments.UserId);
-        //    return View(attachments);
-        //}
-
-        // POST: Attachments/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "Id,FilePath,Description,Created,FileUrl,TicketId,UserId")] Attachments attachments)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(attachments).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", attachments.TicketId);
-        //    ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", attachments.UserId);
-        //    return View(attachments);
-        //}
-
-        // GET: Attachments/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Attachments attachments = db.Attachments.Find(id);
-        //    if (attachments == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(attachments);
-        //}
-
-        //// POST: Attachments/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Attachments attachments = db.Attachments.Find(id);
-        //    db.Attachments.Remove(attachments);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+        
 
         protected override void Dispose(bool disposing)
         {
